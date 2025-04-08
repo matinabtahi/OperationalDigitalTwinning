@@ -47,7 +47,7 @@ Email: matin.abtahi@mail.concordia.ca
 
 ---
 
-## 💬 Feedback & Contributions
+## Feedback & Contributions
 
 Feel free to fork, raise issues, or open pull requests!  
 This repo is a work-in-progress and supports a growing research project on **operational digital twinning and semantic control** for smart energy systems.
