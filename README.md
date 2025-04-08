@@ -1,7 +1,7 @@
 
 ---
 
-## 🧱 Ontologies Used
+## Ontologies Used
 
 | Ontology/Schema | Role |
 |-----------------|------|
@@ -12,17 +12,17 @@
 
 ---
 
-## 🔎 Main Features
+## Main Features
 
-- ✅ **Semantic modeling** of buildings, HVAC zones, devices, sensors, and DERs
-- 🔁 **Energy flexibility tagging** (LoadShifting, PeakShaving, etc.) via EFOnt
-- 🧠 **RC grey-box models** integrated with semantic metadata
-- 🧪 **SHACL validation** of modeling logic (e.g., thermostats must have both sensor and command)
-- 📊 **SPARQL queries** to retrieve, group, and classify buildings and services
+- **Semantic modeling** of buildings, HVAC zones, devices, sensors, and DERs
+- **Energy flexibility tagging** (LoadShifting, PeakShaving, etc.) via EFOnt
+- **RC grey-box models** integrated with semantic metadata
+- **SHACL validation** of modeling logic (e.g., thermostats must have both sensor and command)
+- **SPARQL queries** to retrieve, group, and classify buildings and services
 
 ---
 
-## 🌐 Public Ontologies
+## Public Ontologies
 
 | File | Public Link |
 |------|-------------|
@@ -32,13 +32,13 @@
 
 ---
 
-## 📄 License
+## License
 
 MIT License — see `LICENSE` file.
 
 ---
 
-## 👤 Author
+## Author
 
 **Matin Abtahi**  
 PhD Candidate @ Concordia University  
