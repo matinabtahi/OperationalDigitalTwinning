@@ -1,15 +1,53 @@
 @prefix : <https://matinabtahi.github.io/operational_digital_twinning/thermal-model#> .
-@prefix rc: <https://matinabtahi.github.io/operational_digital_twinning/thermal-model#> .
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix odtrc: <https://matinabtahi.github.io/operational_digital_twinning/thermal-model#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix qudt: <http://qudt.org/schema/qudt/> .
+@prefix unit: <http://qudt.org/vocab/unit/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 <https://matinabtahi.github.io/operational_digital_twinning/thermal-model> a owl:Ontology ;
     rdfs:label "Thermal RC Model Ontology" ;
-    rdfs:comment "A semantic model to describe RC-based grey-box thermal models for buildings." .
+    rdfs:comment "A semantic ontology to describe thermal RC models for simulation and model-based predictive control in buildings. Includes air and envelope nodes, resistances, capacitances, solar aperture, and governing dynamics." .
+
+### Core Classes
 
 rc:RCModel a owl:Class ;
     rdfs:label "RC Model" ;
-    rdfs:comment "Thermal RC model representing the energy dynamics of a zone." .
+    rdfs:comment "A thermal RC model describing the dynamic energy balance of a zone." .
+
+rc:Node a owl:Class ;
+    rdfs:label "Thermal Node" ;
+    rdfs:comment "A thermal node, such as indoor air, envelope wall mass, etc." .
+
+rc:AirNode a owl:Class ;
+    rdfs:subClassOf rc:Node ;
+    rdfs:label "Air Node" ;
+    rdfs:comment "Represents the air temperature node in a thermal zone." .
+
+rc:EnvelopeNode a owl:Class ;
+    rdfs:subClassOf rc:Node ;
+    rdfs:label "Envelope Node" ;
+    rdfs:comment "Represents thermal mass of the envelope, interacting with the air node via R/C components." .
+
+rc:RValue a owl:Class ;
+    rdfs:label "Thermal Resistance" ;
+    rdfs:comment "Represents thermal resistance (K/W) between nodes." .
+
+rc:CValue a owl:Class ;
+    rdfs:label "Thermal Capacitance" ;
+    rdfs:comment "Represents thermal capacitance (J/K) of a node." .
+
+rc:SolarAperture a owl:Class ;
+    rdfs:label "Solar Aperture" ;
+    rdfs:comment "Represents the effective solar gain surface area (in m²)." .
+
+### Properties
+
+rc:hasNode a owl:ObjectProperty ;
+    rdfs:domain rc:RCModel ;
+    rdfs:range rc:Node ;
+    rdfs:label "has Node" .
 
 rc:hasResistance a owl:ObjectProperty ;
     rdfs:domain rc:RCModel ;
@@ -21,8 +59,43 @@ rc:hasCapacitance a owl:ObjectProperty ;
     rdfs:range rc:CValue ;
     rdfs:label "has Capacitance" .
 
-rc:RValue a owl:Class ;
-    rdfs:label "Thermal Resistance" .
+rc:hasSolarAperture a owl:ObjectProperty ;
+    rdfs:domain rc:RCModel ;
+    rdfs:range rc:SolarAperture ;
+    rdfs:label "has Solar Aperture" .
 
-rc:CValue a owl:Class ;
-    rdfs:label "Thermal Capacitance" .
+rc:connects a owl:ObjectProperty ;
+    rdfs:domain rc:RValue ;
+    rdfs:range rc:Node ;
+    rdfs:label "connects" ;
+    rdfs:comment "Used twice per R to indicate both ends of the connection." .
+
+rc:belongsToNode a owl:ObjectProperty ;
+    rdfs:domain rc:CValue ;
+    rdfs:range rc:Node ;
+    rdfs:label "belongs to Node" .
+
+rc:numericValue a owl:DatatypeProperty ;
+    rdfs:domain [ owl:unionOf (rc:RValue rc:CValue rc:SolarAperture) ] ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "numeric value" .
+
+rc:unit a owl:ObjectProperty ;
+    rdfs:domain [ owl:unionOf (rc:RValue rc:CValue rc:SolarAperture) ] ;
+    rdfs:range qudt:Unit ;
+    rdfs:label "unit" .
+
+rc:governingEquation a owl:AnnotationProperty ;
+    rdfs:label "governing equation" ;
+    rdfs:comment "Textual reference to the governing physical dynamics (e.g., 1R1C ODE)." .
+
+### Example usage (in annotation)
+
+# rc:RCModel_Zone1 rc:governingEquation """
+#   C_air * dT_air/dt = (T_out - T_air)/R + Q + alpha * G
+#   where:
+#     alpha = solar aperture
+#     G = irradiance
+# """ .
+
+
