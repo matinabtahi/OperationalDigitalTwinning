@@ -1,0 +1,9 @@
+cff-version: 1.0.0
+message: "If you use this repo, please cite it as below."
+title: "Operational Digital Twinning with Semantic Ontologies"
+authors:
+  - family-names: Abtahi
+    given-names: Matin
+    orcid: https://orcid.org/0000-0000-0000-0000
+license: MIT
+repository-code: https://github.com/matinabtahi/operational_digital_twinning
