@@ -1,0 +1,28 @@
+@prefix : <https://matinabtahi.github.io/operational_digital_twinning/thermal-model#> .
+@prefix rc: <https://matinabtahi.github.io/operational_digital_twinning/thermal-model#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+<https://matinabtahi.github.io/operational_digital_twinning/thermal-model> a owl:Ontology ;
+    rdfs:label "Thermal RC Model Ontology" ;
+    rdfs:comment "A semantic model to describe RC-based grey-box thermal models for buildings." .
+
+rc:RCModel a owl:Class ;
+    rdfs:label "RC Model" ;
+    rdfs:comment "Thermal RC model representing the energy dynamics of a zone." .
+
+rc:hasResistance a owl:ObjectProperty ;
+    rdfs:domain rc:RCModel ;
+    rdfs:range rc:RValue ;
+    rdfs:label "has Resistance" .
+
+rc:hasCapacitance a owl:ObjectProperty ;
+    rdfs:domain rc:RCModel ;
+    rdfs:range rc:CValue ;
+    rdfs:label "has Capacitance" .
+
+rc:RValue a owl:Class ;
+    rdfs:label "Thermal Resistance" .
+
+rc:CValue a owl:Class ;
+    rdfs:label "Thermal Capacitance" .
