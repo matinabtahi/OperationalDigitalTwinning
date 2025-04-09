@@ -54,7 +54,7 @@ odtrc:hasInput a owl:ObjectProperty ;
     rdfs:domain odtrc:RCModel ;
     rdfs:range <https://brickschema.org/schema/1.1/Brick#Point> ;
     rdfs:label "has Input" ;
-    rdfs:comment "Associates the RC model with external forcing inputs such as outdoor temperature, heating power, or solar irradiance." .
+    rdfs:comment "Associates the RC model with external inputs such as outdoor temperature, heating power, or solar irradiance." .
 
 odtrc:hasState a owl:ObjectProperty ;
     rdfs:domain odtrc:RCModel ;
