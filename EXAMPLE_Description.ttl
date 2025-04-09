@@ -1,3 +1,20 @@
+########################################################################################################
+# This RDF Turtle file defines a semantic representation of a simple 1R1C1α grey-box thermal model 
+# using the ODTRC ontology (https://matinabtahi.github.io/operational_digital_twinning/odtrc#) 
+# along with Brick and QUDT vocabularies.
+#
+# The model describes:
+# - A single HVAC zone (Zone1)
+# - Associated environmental and control inputs (Outdoor temperature, Heating command, Solar irradiance)
+# - A lumped thermal node representing the zone’s air + envelope
+# - A virtual outdoor node
+# - Thermal resistance (R), thermal capacitance (C), and solar aperture (α) parameters
+# - Governing energy balance dynamics as an annotated string
+#
+# This file is designed to be machine-readable and usable for simulation, validation, and control agent 
+# reasoning in semantic digital twins.
+########################################################################################################
+
 @prefix brick: <https://brickschema.org/schema/1.1/Brick#> .
 @prefix qudt: <http://qudt.org/schema/qudt/> .
 @prefix unit: <http://qudt.org/vocab/unit/> .
