@@ -91,9 +91,10 @@ odtrc:connects a owl:ObjectProperty ;
     rdfs:comment "Used twice per R to indicate both ends of the connection." .
 
 odtrc:belongsToNode a owl:ObjectProperty ;
-    rdfs:domain odtrc:CValue ;
+    rdfs:domain [ owl:unionOf (odtrc:CValue odtrc:SolarAperture) ] ;
     rdfs:range odtrc:Node ;
-    rdfs:label "belongs to Node" .
+    rdfs:label "belongs to Node" ;
+    rdfs:comment "Indicates the node holding thermal capacity or receiving solar gains." .
 
 ### Value Properties
 
