@@ -27,7 +27,7 @@
 | File | Public Link |
 |------|-------------|
 | Brick | [https://brickschema.org/schema/1.1/Brick#](https://brickschema.org/schema/1.1/Brick#) |
-| EFOnt | [https://purl.org/efont#](https://purl.org/efont#) |
+| EFOnt | [https://github.com/LBNL-ETA/EnergyFlexibilityOntology/blob/main/ontology/EFOnt.ttl](https://github.com/LBNL-ETA/EnergyFlexibilityOntology/blob/main/ontology/EFOnt.ttl) |
 | ODTRC | [https://matinabtahi.github.io/operational_digital_twinning/thermal-model.ttl](https://matinabtahi.github.io/operational_digital_twinning/thermal-model.ttl) |
 
 ---
