@@ -87,15 +87,4 @@ rc:unit a owl:ObjectProperty ;
 
 rc:governingEquation a owl:AnnotationProperty ;
     rdfs:label "governing equation" ;
-    rdfs:comment "Textual reference to the governing physical dynamics (e.g., 1R1C ODE)." .
-
-### Example usage (in annotation)
-
-# rc:RCModel_Zone1 rc:governingEquation """
-#   C_air * dT_air/dt = (T_out - T_air)/R + Q + alpha * G
-#   where:
-#     alpha = solar aperture
-#     G = irradiance
-# """ .
-
-
+    rdfs:comment "Textual reference to the governing physical dynamics." .
