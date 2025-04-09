@@ -7,7 +7,7 @@
 |-----------------|------|
 | [Brick Schema](https://brickschema.org) | Describes building components, zones, systems |
 | [EFOnt](https://github.com/LBNL-ETA/EnergyFlexibilityOntology) | Tags devices with flexibility service capabilities |
-| [Custom Thermal RC Model](https://matinabtahi.github.io/operational_digital_twinning/thermal-model.ttl) | Extends Brick with thermal resistance/capacitance semantics |
+| [ODTRC](https://matinabtahi.github.io/operational_digital_twinning/thermal-model.ttl) | Extends Brick with thermal resistance/capacitance semantics |
 | SHACL | Used for validating RDF structure and modeling rules |
 
 ---
@@ -26,9 +26,9 @@
 
 | File | Public Link |
 |------|-------------|
-| `ODTRC` | [View TTL](https://matinabtahi.github.io/operational_digital_twinning/thermal-model.ttl) |
 | Brick | [https://brickschema.org/schema/1.1/Brick#](https://brickschema.org/schema/1.1/Brick#) |
 | EFOnt | [https://purl.org/efont#](https://purl.org/efont#) |
+| ODTRC | [View TTL](https://matinabtahi.github.io/operational_digital_twinning/thermal-model.ttl) |
 
 ---
 
