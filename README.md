@@ -43,7 +43,7 @@ MIT License — see `LICENSE` file.
 **Matin Abtahi**  
 PhD Candidate @ Concordia University  
 Center for Zero Energy Building Studies (CZEBS)  
-Email: matin.abtahi@mail.concordia.ca
+Email: matinabtahi@gmail.com
 
 ---
 
