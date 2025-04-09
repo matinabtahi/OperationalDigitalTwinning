@@ -1,0 +1,62 @@
+@prefix brick: <https://brickschema.org/schema/Brick#> .
+@prefix odtrc: <https://matinabtahi.github.io/operational_digital_twinning/thermal-model#> .
+@prefix ex: <https://example.org/rcmodel#> .
+@prefix qudt: <http://qudt.org/schema/qudt/> .
+@prefix unit: <http://qudt.org/vocab/unit/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# === Zone Definition ===
+ex:Zone1 a brick:HVAC_Zone .
+
+# === Sensors and Control Points ===
+ex:OutdoorTemp a brick:Outdoor_Air_Temperature_Sensor ;
+    qudt:hasQuantityKind qudt:Temperature .
+
+ex:IndoorTemp a brick:Zone_Air_Temperature_Sensor ;
+    brick:isPointOf ex:Zone1 ;
+    qudt:hasQuantityKind qudt:Temperature .
+
+ex:HeatInput a brick:Heating_Command ;
+    brick:isPointOf ex:Zone1 ;
+    qudt:hasQuantityKind qudt:Energy .
+
+# === RC Model Instance (1R1C) ===
+ex:Zone1_RCModel a rc:RCModel ;
+    rdfs:label "1R1C RC Model of Zone1" ;
+    rc:modelsZone ex:Zone1 ;
+    rc:hasAirNode ex:Zone1_AirNode ;
+    rc:hasEnvelopeNode ex:Zone1_EnvelopeNode ;
+    rc:hasInput ex:OutdoorTemp , ex:HeatInput ;
+    rc:hasState ex:IndoorTemp ;
+    rc:hasEquation """
+        C * dT_i/dt = (T_o - T_i)/R + Q
+        where:
+          T_i = Indoor air temperature
+          T_o = Outdoor air temperature
+          Q   = Heat input
+          R, C = Model parameters
+    """ .
+
+# === Air Node ===
+ex:Zone1_AirNode a rc:AirNode ;
+    rdfs:label "Air Node of Zone1" ;
+    rc:hasTemperature ex:IndoorTemp ;
+    rc:hasCapacitance [
+        a rc:CValue ;
+        qudt:numericValue "15000"^^xsd:decimal ;
+        qudt:unit unit:J-PER-K
+    ] .
+
+# === Envelope Node ===
+ex:Zone1_EnvelopeNode a rc:EnvelopeNode ;
+    rdfs:label "Envelope Node of Zone1" ;
+    rc:hasConnectedTemperature ex:OutdoorTemp ;
+    rc:hasResistance [
+        a rc:RValue ;
+        qudt:numericValue "0.0075"^^xsd:decimal ;
+        qudt:unit unit:K-PER-W
+    ] ;
+    rc:hasSolarAperture [
+        qudt:numericValue "4.5"^^xsd:decimal ;
+        qudt:unit unit:M2
+    ] .
