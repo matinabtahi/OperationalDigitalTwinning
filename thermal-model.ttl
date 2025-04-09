@@ -12,79 +12,79 @@
 
 ### Core Classes
 
-rc:RCModel a owl:Class ;
+odtrc:RCModel a owl:Class ;
     rdfs:label "RC Model" ;
     rdfs:comment "A thermal RC model describing the dynamic energy balance of a zone." .
 
-rc:Node a owl:Class ;
+odtrc:Node a owl:Class ;
     rdfs:label "Thermal Node" ;
     rdfs:comment "A thermal node, such as indoor air, envelope wall mass, etc." .
 
-rc:AirNode a owl:Class ;
-    rdfs:subClassOf rc:Node ;
+odtrc:AirNode a owl:Class ;
+    rdfs:subClassOf odtrc:Node ;
     rdfs:label "Air Node" ;
     rdfs:comment "Represents the air temperature node in a thermal zone." .
 
-rc:EnvelopeNode a owl:Class ;
-    rdfs:subClassOf rc:Node ;
+odtrc:EnvelopeNode a owl:Class ;
+    rdfs:subClassOf odtrc:Node ;
     rdfs:label "Envelope Node" ;
     rdfs:comment "Represents thermal mass of the envelope, interacting with the air node via R/C components." .
 
-rc:RValue a owl:Class ;
+odtrc:RValue a owl:Class ;
     rdfs:label "Thermal Resistance" ;
     rdfs:comment "Represents thermal resistance (K/W) between nodes." .
 
-rc:CValue a owl:Class ;
+odtrc:CValue a owl:Class ;
     rdfs:label "Thermal Capacitance" ;
     rdfs:comment "Represents thermal capacitance (J/K) of a node." .
 
-rc:SolarAperture a owl:Class ;
+odtrc:SolarAperture a owl:Class ;
     rdfs:label "Solar Aperture" ;
     rdfs:comment "Represents the effective solar gain surface area (in m²)." .
 
 ### Properties
 
-rc:hasNode a owl:ObjectProperty ;
-    rdfs:domain rc:RCModel ;
-    rdfs:range rc:Node ;
+odtrc:hasNode a owl:ObjectProperty ;
+    rdfs:domain odtrc:RCModel ;
+    rdfs:range odtrc:Node ;
     rdfs:label "has Node" .
 
-rc:hasResistance a owl:ObjectProperty ;
-    rdfs:domain rc:RCModel ;
-    rdfs:range rc:RValue ;
+odtrc:hasResistance a owl:ObjectProperty ;
+    rdfs:domain odtrc:RCModel ;
+    rdfs:range odtrc:RValue ;
     rdfs:label "has Resistance" .
 
-rc:hasCapacitance a owl:ObjectProperty ;
-    rdfs:domain rc:RCModel ;
-    rdfs:range rc:CValue ;
+odtrc:hasCapacitance a owl:ObjectProperty ;
+    rdfs:domain odtrc:RCModel ;
+    rdfs:range odtrc:CValue ;
     rdfs:label "has Capacitance" .
 
-rc:hasSolarAperture a owl:ObjectProperty ;
-    rdfs:domain rc:RCModel ;
-    rdfs:range rc:SolarAperture ;
+odtrc:hasSolarAperture a owl:ObjectProperty ;
+    rdfs:domain odtrc:RCModel ;
+    rdfs:range odtrc:SolarAperture ;
     rdfs:label "has Solar Aperture" .
 
-rc:connects a owl:ObjectProperty ;
-    rdfs:domain rc:RValue ;
-    rdfs:range rc:Node ;
+odtrc:connects a owl:ObjectProperty ;
+    rdfs:domain odtrc:RValue ;
+    rdfs:range odtrc:Node ;
     rdfs:label "connects" ;
     rdfs:comment "Used twice per R to indicate both ends of the connection." .
 
-rc:belongsToNode a owl:ObjectProperty ;
-    rdfs:domain rc:CValue ;
-    rdfs:range rc:Node ;
+odtrc:belongsToNode a owl:ObjectProperty ;
+    rdfs:domain odtrc:CValue ;
+    rdfs:range odtrc:Node ;
     rdfs:label "belongs to Node" .
 
-rc:numericValue a owl:DatatypeProperty ;
-    rdfs:domain [ owl:unionOf (rc:RValue rc:CValue rc:SolarAperture) ] ;
+odtrc:numericValue a owl:DatatypeProperty ;
+    rdfs:domain [ owl:unionOf (odtrc:RValue odtrc:CValue odtrc:SolarAperture) ] ;
     rdfs:range xsd:decimal ;
     rdfs:label "numeric value" .
 
-rc:unit a owl:ObjectProperty ;
-    rdfs:domain [ owl:unionOf (rc:RValue rc:CValue rc:SolarAperture) ] ;
+odtrc:unit a owl:ObjectProperty ;
+    rdfs:domain [ owl:unionOf (odtrc:RValue odtrc:CValue odtrc:SolarAperture) ] ;
     rdfs:range qudt:Unit ;
     rdfs:label "unit" .
 
-rc:governingEquation a owl:AnnotationProperty ;
+odtrc:governingEquation a owl:AnnotationProperty ;
     rdfs:label "governing equation" ;
     rdfs:comment "Textual reference to the governing physical dynamics." .
