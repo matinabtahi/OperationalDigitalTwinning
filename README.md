@@ -26,7 +26,7 @@
 
 | File | Public Link |
 |------|-------------|
-| `thermal-model.ttl` | [View TTL](https://matinabtahi.github.io/operational_digital_twinning/thermal-model.ttl) |
+| ODTRC | [View TTL](https://matinabtahi.github.io/operational_digital_twinning/thermal-model.ttl) |
 | Brick | [https://brickschema.org/schema/1.1/Brick#](https://brickschema.org/schema/1.1/Brick#) |
 | EFOnt | [https://purl.org/efont#](https://purl.org/efont#) |
 
