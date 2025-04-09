@@ -1,62 +1,80 @@
-@prefix brick: <https://brickschema.org/schema/Brick#> .
-@prefix odtrc: <https://matinabtahi.github.io/operational_digital_twinning/thermal-model#> .
-@prefix ex: <https://example.org/rcmodel#> .
+@prefix brick: <https://brickschema.org/schema/1.1/Brick#> .
 @prefix qudt: <http://qudt.org/schema/qudt/> .
 @prefix unit: <http://qudt.org/vocab/unit/> .
+@prefix odtrc: <https://matinabtahi.github.io/operational_digital_twinning/thermal-model#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix ex: <https://example.org/model#> .
 
 # === Zone Definition ===
-ex:Zone1 a brick:HVAC_Zone .
+ex:Zone1 a brick:HVAC_Zone ;
+    rdfs:label "My House" .
 
 # === Sensors and Control Points ===
 ex:OutdoorTemp a brick:Outdoor_Air_Temperature_Sensor ;
-    qudt:hasQuantityKind qudt:Temperature .
+    qudt:hasQuantityKind qudt:Temperature ;
+    qudt:unit unit:DEG_C .
 
 ex:IndoorTemp a brick:Zone_Air_Temperature_Sensor ;
     brick:isPointOf ex:Zone1 ;
-    qudt:hasQuantityKind qudt:Temperature .
+    qudt:hasQuantityKind qudt:Temperature ;
+    qudt:unit unit:DEG_C .
 
 ex:HeatInput a brick:Heating_Command ;
     brick:isPointOf ex:Zone1 ;
-    qudt:hasQuantityKind qudt:Energy .
+    qudt:hasQuantityKind qudt:Power ;
+    qudt:unit unit:W .
 
-# === RC Model Instance (1R1C) ===
+ex:SolarIrradiance a brick:Solar_Irradiance_Sensor ;
+    qudt:hasQuantityKind qudt:Irradiance ;
+    qudt:unit unit:W-PER-M2 .
+
+# === 1R1C1α Model Definition ===
 ex:Zone1_RCModel a odtrc:RCModel ;
-    rdfs:label "1R1C RC Model of Zone1" ;
+    rdfs:label "Lumped 1R1C1α Thermal Model for Zone1" ;
     odtrc:modelsZone ex:Zone1 ;
-    odtrc:hasAirNode ex:Zone1_AirNode ;
-    odtrc:hasEnvelopeNode ex:Zone1_EnvelopeNode ;
-    odtrc:hasInput ex:OutdoorTemp , ex:HeatInput ;
+    odtrc:hasInput ex:OutdoorTemp, ex:HeatInput, ex:SolarIrradiance ;
     odtrc:hasState ex:IndoorTemp ;
-    odtrc:hasEquation """
-        C * dT_i/dt = (T_o - T_i)/R + Q
+    odtrc:governingEquation """
+        C * dT_i/dt = (T_o - T_i)/R + α * G + Q
         where:
-          T_i = Indoor air temperature
-          T_o = Outdoor air temperature
-          Q   = Heat input
-          R, C = Model parameters
+          T_i = indoor temperature [°C]
+          T_o = outdoor temperature [°C]
+          R = resistance [K/W]
+          C = capacitance [J/K]
+          Q = heating input [W]
+          G = solar irradiance [W/m²]
+          α = solar aperture [m²]
     """ .
 
-# === Air Node ===
-ex:Zone1_AirNode a odtrc:AirNode ;
-    rdfs:label "Air Node of Zone1" ;
-    odtrc:hasTemperature ex:IndoorTemp ;
-    odtrc:hasCapacitance [
-        a odtrc:CValue ;
-        qudt:numericValue "15000"^^xsd:decimal ;
-        qudt:unit unit:J-PER-K
-    ] .
+# === Lumped Indoor Node & Virtual Outdoor Node===
+ex:Zone1_LumpedNode a odtrc:Node ;
+    rdfs:label "Lumped Thermal Node for Zone1" .
 
-# === Envelope Node ===
-ex:Zone1_EnvelopeNode a odtrc:EnvelopeNode ;
-    rdfs:label "Envelope Node of Zone1" ;
-    odtrc:hasConnectedTemperature ex:OutdoorTemp ;
-    odtrc:hasResistance [
-        a odtrc:RValue ;
-        qudt:numericValue "0.0075"^^xsd:decimal ;
-        qudt:unit unit:K-PER-W
-    ] ;
-    odtrc:hasSolarAperture [
-        qudt:numericValue "4.5"^^xsd:decimal ;
-        qudt:unit unit:M2
-    ] .
+ex:OutdoorNode a odtrc:Node ;
+    rdfs:label "Outdoor Air Virtual Node" .
+
+# === RC Parameters ===
+ex:R_Zone1 a odtrc:RValue ;
+    odtrc:numericValue "0.0075"^^xsd:decimal ;
+    odtrc:unit unit:K-PER-W ;
+    odtrc:connects ex:Zone1_LumpedNode, ex:OutdoorNode ;
+    rdfs:label "Thermal Resistance R (Zone1)" .
+
+ex:C_Zone1 a odtrc:CValue ;
+    odtrc:numericValue "15000"^^xsd:decimal ;
+    odtrc:unit unit:J-PER-K ;
+    odtrc:belongsToNode ex:Zone1_LumpedNode ;
+    rdfs:label "Thermal Capacitance C (Zone1)" .
+
+ex:Alpha_Zone1 a odtrc:SolarAperture ;
+    odtrc:numericValue "3.5"^^xsd:decimal ;
+    odtrc:unit unit:M2 ;
+    odtrc:belongsToNode ex:Zone1_LumpedNode .
+    rdfs:label "Solar Aperture α (Zone1)" .
+
+# === Link Parameters to Model ===
+ex:Zone1_RCModel odtrc:hasNode ex:Zone1_LumpedNode ;
+    odtrc:hasResistance ex:R_Zone1 ;
+    odtrc:hasCapacitance ex:C_Zone1 ;
+    odtrc:hasSolarAperture ex:Alpha_Zone1 .
