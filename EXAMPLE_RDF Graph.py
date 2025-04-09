@@ -2,7 +2,7 @@ from rdflib import Graph
 from pyvis.network import Network
 
 # Load the RDF data from the TTL file
-ttl_path = "https://raw.githubusercontent.com/matinabtahi/operational_digital_twinning/main/EXAMPLE.ttl"
+ttl_path = "https://raw.githubusercontent.com/matinabtahi/operational_digital_twinning/main/EXAMPLE_Description.ttl"
 g = Graph()
 g.parse(ttl_path, format="ttl")
 
