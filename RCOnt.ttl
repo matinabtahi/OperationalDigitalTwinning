@@ -12,104 +12,104 @@
 
 ### Core Classes
 
-odtrc:RCModel a owl:Class ;
+rcont:RCModel a owl:Class ;
     rdfs:label "RC Model" ;
     rdfs:comment "A thermal RC model describing the dynamic energy balance of a zone." .
 
-odtrc:Node a owl:Class ;
+rcont:Node a owl:Class ;
     rdfs:label "Thermal Node" ;
     rdfs:comment "A thermal node, such as indoor air, envelope wall mass, etc." .
 
-odtrc:AirNode a owl:Class ;
-    rdfs:subClassOf odtrc:Node ;
+rcont:AirNode a owl:Class ;
+    rdfs:subClassOf rcont:Node ;
     rdfs:label "Air Node" ;
     rdfs:comment "Represents the air temperature node in a thermal zone." .
 
-odtrc:EnvelopeNode a owl:Class ;
-    rdfs:subClassOf odtrc:Node ;
+rcont:EnvelopeNode a owl:Class ;
+    rdfs:subClassOf rcont:Node ;
     rdfs:label "Envelope Node" ;
     rdfs:comment "Represents thermal mass of the envelope, interacting with the air node via R/C components." .
 
-odtrc:RValue a owl:Class ;
+rcont:RValue a owl:Class ;
     rdfs:label "Thermal Resistance" ;
     rdfs:comment "Represents thermal resistance (K/W) between nodes." .
 
-odtrc:CValue a owl:Class ;
+rcont:CValue a owl:Class ;
     rdfs:label "Thermal Capacitance" ;
     rdfs:comment "Represents thermal capacitance (J/K) of a node." .
 
-odtrc:SolarAperture a owl:Class ;
+rcont:SolarAperture a owl:Class ;
     rdfs:label "Solar Aperture" ;
     rdfs:comment "Represents the effective solar gain surface area (in m²)." .
 
 ### Modeling Semantics
 
-odtrc:modelsZone a owl:ObjectProperty ;
-    rdfs:domain odtrc:RCModel ;
+rcont:modelsZone a owl:ObjectProperty ;
+    rdfs:domain rcont:RCModel ;
     rdfs:range <https://brickschema.org/schema/1.1/Brick#HVAC_Zone> ;
     rdfs:label "models Zone" ;
     rdfs:comment "Connects the RC model to the Brick HVAC zone it represents." .
 
-odtrc:hasInput a owl:ObjectProperty ;
-    rdfs:domain odtrc:RCModel ;
+rcont:hasInput a owl:ObjectProperty ;
+    rdfs:domain rcont:RCModel ;
     rdfs:range <https://brickschema.org/schema/1.1/Brick#Point> ;
     rdfs:label "has Input" ;
     rdfs:comment "Associates the RC model with external inputs such as outdoor temperature, heating power, or solar irradiance." .
 
-odtrc:hasState a owl:ObjectProperty ;
-    rdfs:domain odtrc:RCModel ;
+rcont:hasState a owl:ObjectProperty ;
+    rdfs:domain rcont:RCModel ;
     rdfs:range <https://brickschema.org/schema/1.1/Brick#Point> ;
     rdfs:label "has State" ;
     rdfs:comment "Associates the RC model with a measurable state variable, e.g., indoor air temperature." .
 
 ### Structural Properties
 
-odtrc:hasNode a owl:ObjectProperty ;
-    rdfs:domain odtrc:RCModel ;
-    rdfs:range odtrc:Node ;
+rcont:hasNode a owl:ObjectProperty ;
+    rdfs:domain rcont:RCModel ;
+    rdfs:range rcont:Node ;
     rdfs:label "has Node" .
 
-odtrc:hasResistance a owl:ObjectProperty ;
-    rdfs:domain odtrc:RCModel ;
-    rdfs:range odtrc:RValue ;
+rcont:hasResistance a owl:ObjectProperty ;
+    rdfs:domain rcont:RCModel ;
+    rdfs:range rcont:RValue ;
     rdfs:label "has Resistance" .
 
-odtrc:hasCapacitance a owl:ObjectProperty ;
-    rdfs:domain odtrc:RCModel ;
-    rdfs:range odtrc:CValue ;
+rcont:hasCapacitance a owl:ObjectProperty ;
+    rdfs:domain rcont:RCModel ;
+    rdfs:range rcont:CValue ;
     rdfs:label "has Capacitance" .
 
-odtrc:hasSolarAperture a owl:ObjectProperty ;
-    rdfs:domain odtrc:RCModel ;
-    rdfs:range odtrc:SolarAperture ;
+rcont:hasSolarAperture a owl:ObjectProperty ;
+    rdfs:domain rcont:RCModel ;
+    rdfs:range rcont:SolarAperture ;
     rdfs:label "has Solar Aperture" .
 
-odtrc:connects a owl:ObjectProperty ;
-    rdfs:domain odtrc:RValue ;
-    rdfs:range odtrc:Node ;
+rcont:connects a owl:ObjectProperty ;
+    rdfs:domain rcont:RValue ;
+    rdfs:range rcont:Node ;
     rdfs:label "connects" ;
     rdfs:comment "Used twice per R to indicate both ends of the connection." .
 
-odtrc:belongsToNode a owl:ObjectProperty ;
-    rdfs:domain [ owl:unionOf (odtrc:CValue odtrc:SolarAperture) ] ;
-    rdfs:range odtrc:Node ;
+rcont:belongsToNode a owl:ObjectProperty ;
+    rdfs:domain [ owl:unionOf (rcont:CValue rcont:SolarAperture) ] ;
+    rdfs:range rcont:Node ;
     rdfs:label "belongs to Node" ;
     rdfs:comment "Indicates the node holding thermal capacity or receiving solar gains." .
 
 ### Value Properties
 
-odtrc:numericValue a owl:DatatypeProperty ;
-    rdfs:domain [ owl:unionOf (odtrc:RValue odtrc:CValue odtrc:SolarAperture) ] ;
+rcont:numericValue a owl:DatatypeProperty ;
+    rdfs:domain [ owl:unionOf (rcont:RValue rcont:CValue rcont:SolarAperture) ] ;
     rdfs:range xsd:decimal ;
     rdfs:label "numeric value" .
 
-odtrc:unit a owl:ObjectProperty ;
-    rdfs:domain [ owl:unionOf (odtrc:RValue odtrc:CValue odtrc:SolarAperture) ] ;
+rcont:unit a owl:ObjectProperty ;
+    rdfs:domain [ owl:unionOf (rcont:RValue rcont:CValue rcont:SolarAperture) ] ;
     rdfs:range qudt:Unit ;
     rdfs:label "unit" .
 
 ### Annotation
 
-odtrc:governingEquation a owl:AnnotationProperty ;
+rcont:governingEquation a owl:AnnotationProperty ;
     rdfs:label "governing equation" ;
     rdfs:comment "Textual reference to the governing physical dynamics." .
