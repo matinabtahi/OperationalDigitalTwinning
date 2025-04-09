@@ -1,5 +1,5 @@
-@prefix : <https://matinabtahi.github.io/operational_digital_twinning/thermal-model#> .
-@prefix odtrc: <https://matinabtahi.github.io/operational_digital_twinning/thermal-model#> .
+@prefix : <https://matinabtahi.github.io/operational_digital_twinning/odtrc#> .
+@prefix odtrc: <https://matinabtahi.github.io/operational_digital_twinning/odtrc#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix qudt: <http://qudt.org/schema/qudt/> .
