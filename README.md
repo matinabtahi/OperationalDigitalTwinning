@@ -3,7 +3,7 @@
 
 ## Ontologies Used
 
-| Ontology/Schema | Role |
+| Ontology/Schema Public Link| Role |
 |-----------------|------|
 | [Brick Schema](https://brickschema.org) | Describes building components, zones, systems |
 | [EFOnt](https://github.com/LBNL-ETA/EnergyFlexibilityOntology) | Tags devices with flexibility service capabilities |
@@ -18,16 +18,6 @@
 - **Thermal RC grey-box models** integrated with semantic metadata
 - **SHACL validation** of modeling logic
 - **SPARQL queries** to retrieve, group, and classify buildings and services
-
----
-
-## Public Ontologies
-
-| File | Public Link |
-|------|-------------|
-| Brick | [https://brickschema.org/schema/1.1/Brick#](https://brickschema.org/schema/1.1/Brick#) |
-| EFOnt | [https://github.com/LBNL-ETA/EnergyFlexibilityOntology/blob/main/ontology/EFOnt.ttl](https://github.com/LBNL-ETA/EnergyFlexibilityOntology/blob/main/ontology/EFOnt.ttl) |
-| RCOnt | [https://github.com/matinabtahi/OperationalDigitalTwinning/blob/main/RCOnt.ttl](https://github.com/matinabtahi/OperationalDigitalTwinning/blob/main/RCOnt.ttl) |
 
 ---
 
