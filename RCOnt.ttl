@@ -1,13 +1,13 @@
-@prefix : <https://matinabtahi.github.io/operational_digital_twinning/odtrc#> .
-@prefix odtrc: <https://matinabtahi.github.io/operational_digital_twinning/odtrc#> .
+@prefix : <https://matinabtahi.github.io/OperationalDigitalTwinning/RCOnt#> .
+@prefix rcont: <https://matinabtahi.github.io/OperationalDigitalTwinning/RCOnt#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix qudt: <http://qudt.org/schema/qudt/> .
 @prefix unit: <http://qudt.org/vocab/unit/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-<https://matinabtahi.github.io/operational_digital_twinning/thermal-model> a owl:Ontology ;
-    rdfs:label "Thermal RC Model Ontology" ;
+<https://matinabtahi.github.io/OperationalDigitalTwinning/RCOnt> a owl:Ontology ;
+    rdfs:label "RC Ontology" ;
     rdfs:comment "A semantic ontology to describe thermal RC models for simulation and model-based predictive control in buildings. Includes air and envelope nodes, resistances, capacitances, solar aperture, governing dynamics, and alignment with building zones." .
 
 ### Core Classes
