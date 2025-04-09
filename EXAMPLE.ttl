@@ -70,7 +70,7 @@ ex:C_Zone1 a odtrc:CValue ;
 ex:Alpha_Zone1 a odtrc:SolarAperture ;
     odtrc:numericValue "3.5"^^xsd:decimal ;
     odtrc:unit unit:M2 ;
-    odtrc:belongsToNode ex:Zone1_LumpedNode .
+    odtrc:belongsToNode ex:Zone1_LumpedNode ;
     rdfs:label "Solar Aperture α (Zone1)" .
 
 # === Link Parameters to Model ===
