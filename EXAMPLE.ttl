@@ -21,14 +21,14 @@ ex:HeatInput a brick:Heating_Command ;
     qudt:hasQuantityKind qudt:Energy .
 
 # === RC Model Instance (1R1C) ===
-ex:Zone1_RCModel a rc:RCModel ;
+ex:Zone1_RCModel a odtrc:RCModel ;
     rdfs:label "1R1C RC Model of Zone1" ;
-    rc:modelsZone ex:Zone1 ;
-    rc:hasAirNode ex:Zone1_AirNode ;
-    rc:hasEnvelopeNode ex:Zone1_EnvelopeNode ;
-    rc:hasInput ex:OutdoorTemp , ex:HeatInput ;
-    rc:hasState ex:IndoorTemp ;
-    rc:hasEquation """
+    odtrc:modelsZone ex:Zone1 ;
+    odtrc:hasAirNode ex:Zone1_AirNode ;
+    odtrc:hasEnvelopeNode ex:Zone1_EnvelopeNode ;
+    odtrc:hasInput ex:OutdoorTemp , ex:HeatInput ;
+    odtrc:hasState ex:IndoorTemp ;
+    odtrc:hasEquation """
         C * dT_i/dt = (T_o - T_i)/R + Q
         where:
           T_i = Indoor air temperature
@@ -38,25 +38,25 @@ ex:Zone1_RCModel a rc:RCModel ;
     """ .
 
 # === Air Node ===
-ex:Zone1_AirNode a rc:AirNode ;
+ex:Zone1_AirNode a odtrc:AirNode ;
     rdfs:label "Air Node of Zone1" ;
-    rc:hasTemperature ex:IndoorTemp ;
-    rc:hasCapacitance [
-        a rc:CValue ;
+    odtrc:hasTemperature ex:IndoorTemp ;
+    odtrc:hasCapacitance [
+        a odtrc:CValue ;
         qudt:numericValue "15000"^^xsd:decimal ;
         qudt:unit unit:J-PER-K
     ] .
 
 # === Envelope Node ===
-ex:Zone1_EnvelopeNode a rc:EnvelopeNode ;
+ex:Zone1_EnvelopeNode a odtrc:EnvelopeNode ;
     rdfs:label "Envelope Node of Zone1" ;
-    rc:hasConnectedTemperature ex:OutdoorTemp ;
-    rc:hasResistance [
-        a rc:RValue ;
+    odtrc:hasConnectedTemperature ex:OutdoorTemp ;
+    odtrc:hasResistance [
+        a odtrc:RValue ;
         qudt:numericValue "0.0075"^^xsd:decimal ;
         qudt:unit unit:K-PER-W
     ] ;
-    rc:hasSolarAperture [
+    odtrc:hasSolarAperture [
         qudt:numericValue "4.5"^^xsd:decimal ;
         qudt:unit unit:M2
     ] .
