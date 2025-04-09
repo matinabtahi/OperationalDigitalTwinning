@@ -7,7 +7,7 @@
 |-----------------|------|
 | [Brick Schema](https://brickschema.org) | Describes building components, zones, systems |
 | [EFOnt](https://github.com/LBNL-ETA/EnergyFlexibilityOntology) | Tags devices with flexibility service capabilities |
-| [RCOnt](https://matinabtahi.github.io/operational_digital_twinning/thermal-model.ttl) | Extends Brick with thermal resistance/capacitance semantics |
+| [RCOnt](https://github.com/matinabtahi/OperationalDigitalTwinning/blob/main/RCOnt.ttl) | Extends Brick with thermal resistance/capacitance semantics |
 
 ---
 
@@ -27,7 +27,7 @@
 |------|-------------|
 | Brick | [https://brickschema.org/schema/1.1/Brick#](https://brickschema.org/schema/1.1/Brick#) |
 | EFOnt | [https://github.com/LBNL-ETA/EnergyFlexibilityOntology/blob/main/ontology/EFOnt.ttl](https://github.com/LBNL-ETA/EnergyFlexibilityOntology/blob/main/ontology/EFOnt.ttl) |
-| RCOnt | [https://matinabtahi.github.io/operational_digital_twinning/thermal-model.ttl](https://matinabtahi.github.io/operational_digital_twinning/thermal-model.ttl) |
+| RCOnt | [https://github.com/matinabtahi/OperationalDigitalTwinning/blob/main/RCOnt.ttl](https://github.com/matinabtahi/OperationalDigitalTwinning/blob/main/RCOnt.ttl) |
 
 ---
 
