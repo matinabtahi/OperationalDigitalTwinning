@@ -8,7 +8,7 @@
 
 <https://matinabtahi.github.io/operational_digital_twinning/thermal-model> a owl:Ontology ;
     rdfs:label "Thermal RC Model Ontology" ;
-    rdfs:comment "A semantic ontology to describe thermal RC models for simulation and model-based predictive control in buildings. Includes air and envelope nodes, resistances, capacitances, solar aperture, and governing dynamics." .
+    rdfs:comment "A semantic ontology to describe thermal RC models for simulation and model-based predictive control in buildings. Includes air and envelope nodes, resistances, capacitances, solar aperture, governing dynamics, and alignment with building zones." .
 
 ### Core Classes
 
@@ -42,7 +42,27 @@ odtrc:SolarAperture a owl:Class ;
     rdfs:label "Solar Aperture" ;
     rdfs:comment "Represents the effective solar gain surface area (in m²)." .
 
-### Properties
+### Modeling Semantics
+
+odtrc:modelsZone a owl:ObjectProperty ;
+    rdfs:domain odtrc:RCModel ;
+    rdfs:range <https://brickschema.org/schema/1.1/Brick#HVAC_Zone> ;
+    rdfs:label "models Zone" ;
+    rdfs:comment "Connects the RC model to the Brick HVAC zone it represents." .
+
+odtrc:hasInput a owl:ObjectProperty ;
+    rdfs:domain odtrc:RCModel ;
+    rdfs:range <https://brickschema.org/schema/1.1/Brick#Point> ;
+    rdfs:label "has Input" ;
+    rdfs:comment "Associates the RC model with external forcing inputs such as outdoor temperature, heating power, or solar irradiance." .
+
+odtrc:hasState a owl:ObjectProperty ;
+    rdfs:domain odtrc:RCModel ;
+    rdfs:range <https://brickschema.org/schema/1.1/Brick#Point> ;
+    rdfs:label "has State" ;
+    rdfs:comment "Associates the RC model with a measurable state variable, e.g., indoor air temperature." .
+
+### Structural Properties
 
 odtrc:hasNode a owl:ObjectProperty ;
     rdfs:domain odtrc:RCModel ;
@@ -75,6 +95,8 @@ odtrc:belongsToNode a owl:ObjectProperty ;
     rdfs:range odtrc:Node ;
     rdfs:label "belongs to Node" .
 
+### Value Properties
+
 odtrc:numericValue a owl:DatatypeProperty ;
     rdfs:domain [ owl:unionOf (odtrc:RValue odtrc:CValue odtrc:SolarAperture) ] ;
     rdfs:range xsd:decimal ;
@@ -84,6 +106,8 @@ odtrc:unit a owl:ObjectProperty ;
     rdfs:domain [ owl:unionOf (odtrc:RValue odtrc:CValue odtrc:SolarAperture) ] ;
     rdfs:range qudt:Unit ;
     rdfs:label "unit" .
+
+### Annotation
 
 odtrc:governingEquation a owl:AnnotationProperty ;
     rdfs:label "governing equation" ;
