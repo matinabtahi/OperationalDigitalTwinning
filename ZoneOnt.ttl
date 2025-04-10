@@ -7,7 +7,8 @@
 #####################
 # Ontology Declaration
 #####################
-zoneont: a owl:Ontology ;
+
+<https://matinabtahi.github.io/OperationalDigitalTwinning/ZoneOnt>: a owl:Ontology ;
     rdfs:label "ZoneOnt – Archetype Zones Ontology" ;
     rdfs:comment "Semantic ontology for characterizing archetype thermal and functional zones in buildings, including energy modeling and control metadata." .
 
