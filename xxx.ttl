@@ -1,3 +1,32 @@
+########################################################################################################
+# This RDF Turtle file defines the semantic representation of a **residential HVAC zone**
+# that is modeled using a **1R1C1α grey-box thermal model**.
+#
+# It leverages the following ontologies and vocabularies:
+# - RC Ontology (https://github.com/matinabtahi/OperationalDigitalTwinning/blob/main/RCOnt.ttl)
+#   – to represent thermal dynamics and RC model structure
+# - ZoneOnt Ontology (https://github.com/matinabtahi/OperationalDigitalTwinning/blob/main/ZoneOnt.ttl)
+#   – to classify zone archetypes based on thermal behavior and occupancy type
+# - Brick Schema (https://brickschema.org)
+#   – for sensors, points, and control system integration
+# - QUDT (http://qudt.org)
+#   – to specify physical units and quantities
+#
+# The semantic model describes:
+# - A residential HVAC zone (`Zone1`)
+# - Its thermal classification (MixedMode) and functional use (Residential)
+# - Environmental and control inputs (Outdoor temperature, Heating command, Solar irradiance)
+# - A lumped thermal node representing air + envelope
+# - A virtual outdoor node for external interactions
+# - Thermal resistance (R), capacitance (C), and solar aperture (α) as physical parameters
+# - Governing energy balance equation as a formal string annotation
+#
+# This file is machine-readable and designed for semantic reasoning, simulation, and 
+# ontology-aware control in digital twin environments.
+########################################################################################################
+
+
+
 @prefix brick: <https://brickschema.org/schema/1.1/Brick#> .
 @prefix qudt: <http://qudt.org/schema/qudt/> .
 @prefix unit: <http://qudt.org/vocab/unit/> .
