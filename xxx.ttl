@@ -2,7 +2,7 @@
 @prefix qudt: <http://qudt.org/schema/qudt/> .
 @prefix unit: <http://qudt.org/vocab/unit/> .
 @prefix rcont: <https://matinabtahi.github.io/OperationalDigitalTwinning/RCOnt#> .
-@prefix zoneont: <https://w3id.org/zoneont#> .
+@prefix zoneont: <https://matinabtahi.github.io/OperationalDigitalTwinning/ZoneOnt#>
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix ex: <https://example.org/model#> .
