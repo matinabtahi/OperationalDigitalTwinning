@@ -6,11 +6,17 @@
 @prefix unit: <http://qudt.org/vocab/unit/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
+#####################
+# Ontology Declaration
+#####################
+
 <https://matinabtahi.github.io/OperationalDigitalTwinning/RCOnt> a owl:Ontology ;
     rdfs:label "RC Ontology" ;
     rdfs:comment "A semantic ontology to describe thermal RC models for simulation and model-based predictive control in buildings. Includes air and envelope nodes, resistances, capacitances, solar aperture, governing dynamics, and alignment with building zones." .
 
+#####################
 ### Core Classes
+#####################
 
 rcont:RCModel a owl:Class ;
     rdfs:label "RC Model" ;
@@ -42,7 +48,9 @@ rcont:SolarAperture a owl:Class ;
     rdfs:label "Solar Aperture" ;
     rdfs:comment "Represents the effective solar gain surface area (in m²)." .
 
+#####################
 ### Modeling Semantics
+#####################
 
 rcont:modelsZone a owl:ObjectProperty ;
     rdfs:domain rcont:RCModel ;
@@ -62,7 +70,9 @@ rcont:hasState a owl:ObjectProperty ;
     rdfs:label "has State" ;
     rdfs:comment "Associates the RC model with a measurable state variable, e.g., indoor air temperature." .
 
+#####################
 ### Structural Properties
+#####################
 
 rcont:hasNode a owl:ObjectProperty ;
     rdfs:domain rcont:RCModel ;
@@ -96,7 +106,9 @@ rcont:belongsToNode a owl:ObjectProperty ;
     rdfs:label "belongs to Node" ;
     rdfs:comment "Indicates the node holding thermal capacity or receiving solar gains." .
 
+#####################
 ### Value Properties
+#####################
 
 rcont:numericValue a owl:DatatypeProperty ;
     rdfs:domain [ owl:unionOf (rcont:RValue rcont:CValue rcont:SolarAperture) ] ;
@@ -108,7 +120,9 @@ rcont:unit a owl:ObjectProperty ;
     rdfs:range qudt:Unit ;
     rdfs:label "unit" .
 
+#####################
 ### Annotation
+#####################
 
 rcont:governingEquation a owl:AnnotationProperty ;
     rdfs:label "governing equation" ;
