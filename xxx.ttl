@@ -5,7 +5,7 @@
 # It leverages the following ontologies and vocabularies:
 # - ZoneOnt Ontology (https://github.com/matinabtahi/OperationalDigitalTwinning/blob/main/ZoneOnt.ttl)
 #   – to classify zone archetypes based on thermal behavior and occupancy type
-# - RC Ontology (https://github.com/matinabtahi/OperationalDigitalTwinning/blob/main/RCOnt.ttl)
+# - RCOnt (https://github.com/matinabtahi/OperationalDigitalTwinning/blob/main/RCOnt.ttl)
 #   – to represent thermal dynamics and RC model structure
 # - Brick Schema (https://brickschema.org)
 #   – for sensors, points, and control system integration
