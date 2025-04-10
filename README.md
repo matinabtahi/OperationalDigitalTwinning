@@ -12,16 +12,6 @@
 
 ---
 
-## Main Features
-
-- **Semantic modeling** of buildings, HVAC zones, devices, sensors, and DERs
-- **Energy flexibility tagging** via EFOnt
-- **Thermal RC grey-box models** integrated with semantic metadata
-- **SHACL validation** of modeling logic
-- **SPARQL queries** to retrieve, group, and classify buildings and services
-
----
-
 ## License
 
 MIT License — see `LICENSE` file.
