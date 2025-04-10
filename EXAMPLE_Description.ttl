@@ -1,37 +1,72 @@
 ########################################################################################################
-# This RDF Turtle file defines a semantic representation of a simple 1R1C1α grey-box thermal model 
-# using the RC ontology (https://github.com/matinabtahi/OperationalDigitalTwinning/blob/main/RCOnt.ttl) 
-# along with Brick and QUDT vocabularies.
+# This RDF Turtle file defines the semantic representation of a residential HVAC zone
+# that is modeled using a 1R1C1α grey-box thermal model.
 #
-# The model describes:
-# - A single HVAC zone (Zone1)
-# - Associated environmental and control inputs (Outdoor temperature, Heating command, Solar irradiance)
-# - A lumped thermal node representing the zone’s air + envelope
-# - A virtual outdoor node
-# - Thermal resistance (R), thermal capacitance (C), and solar aperture (α) parameters
-# - Governing energy balance dynamics as an annotated string
+# It leverages the following ontologies and vocabularies:
+# - ZoneOnt Ontology (https://github.com/matinabtahi/OperationalDigitalTwinning/blob/main/ZoneOnt.ttl)
+#   – to classify zone archetypes based on thermal behavior and occupancy type
+# - RCOnt (https://github.com/matinabtahi/OperationalDigitalTwinning/blob/main/RCOnt.ttl)
+#   – to represent thermal dynamics and RC model structure
+# - Brick Schema (https://brickschema.org)
+#   – for sensors, points, and control system integration
+# - QUDT (http://qudt.org)
+#   – to specify physical units and quantities
 #
-# This file is designed to be machine-readable and usable for simulation, validation, and control agent 
-# reasoning in semantic digital twins.
+# The semantic model describes:
+# - A residential HVAC zone (`Zone1`)
+# - Its thermal classification (MixedMode) and functional use (Residential)
+# - Environmental and control inputs (Outdoor temperature, Heating command, Solar irradiance)
+# - A lumped thermal node representing air + envelope
+# - A virtual outdoor node for external interactions
+# - Thermal resistance (R), capacitance (C), and solar aperture (α) as physical parameters
+# - Governing energy balance equation as a formal string annotation
+#
+# This file is machine-readable and designed for semantic reasoning, simulation, and 
+# ontology-aware control in digital twin environments.
 ########################################################################################################
 
 @prefix brick: <https://brickschema.org/schema/1.1/Brick#> .
 @prefix qudt: <http://qudt.org/schema/qudt/> .
 @prefix unit: <http://qudt.org/vocab/unit/> .
 @prefix rcont: <https://matinabtahi.github.io/OperationalDigitalTwinning/RCOnt#> .
+@prefix zoneont: <https://matinabtahi.github.io/OperationalDigitalTwinning/ZoneOnt#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix ex: <https://example.org/model#> .
 
+#################################################################
+# === ZONE SEMANTICS (ZoneOnt) ===
+#################################################################
 # === Zone Definition ===
-ex:Zone1 a brick:HVAC_Zone ;
-    rdfs:label "My House" .
+ex:Zone1 a brick:HVAC_Zone, zoneont:ThermalZone ;
+    rdfs:label "My House" ;
+    zoneont:hasThermalInteraction zoneont:MixedModeZone ;
+    zoneont:hasOccupancyType zoneont:ResidentialZone ;
+    zoneont:floorArea 105.0 ;
+    zoneont:ceilingHeight 2.5 ;
+    zoneont:thermalMassLevel "Medium" ;
+    zoneont:windowToWallRatio 0.30 ;
+    zoneont:peakOccupancy 4 ;
+    zoneont:avgOccupancyHours 16.0 ;
+    zoneont:internalGainsDensity 6.5 ;
+    zoneont:ventilationRate 0.8 ;
+    zoneont:preferredHeatingRange "20–22°C" ;
+    zoneont:preferredCoolingRange "24–26°C" .
 
-# === Sensors and Control Points ===
+
+#################################################################
+# === SENSORS AND INPUTS (Brick) ===
+#################################################################
+# === Outdoor Sensors and Control Points ===
 ex:OutdoorTemp a brick:Outdoor_Air_Temperature_Sensor ;
     qudt:hasQuantityKind qudt:Temperature ;
     qudt:unit unit:DEG_C .
 
+ex:SolarIrradiance a brick:Solar_Irradiance_Sensor ;
+    qudt:hasQuantityKind qudt:Irradiance ;
+    qudt:unit unit:W-PER-M2 .
+
+# === Indoor Sensors and Control Points ===
 ex:IndoorTemp a brick:Zone_Air_Temperature_Sensor ;
     brick:isPointOf ex:Zone1 ;
     qudt:hasQuantityKind qudt:Temperature ;
@@ -42,10 +77,10 @@ ex:HeatInput a brick:Heating_Command ;
     qudt:hasQuantityKind qudt:Power ;
     qudt:unit unit:W .
 
-ex:SolarIrradiance a brick:Solar_Irradiance_Sensor ;
-    qudt:hasQuantityKind qudt:Irradiance ;
-    qudt:unit unit:W-PER-M2 .
 
+#################################################################
+# === RCOnt – Thermal Model Definition ===
+#################################################################
 # === 1R1C1α Model Definition ===
 ex:Zone1_RCModel a rcont:RCModel ;
     rdfs:label "Lumped 1R1C1α Thermal Model for Zone1" ;
