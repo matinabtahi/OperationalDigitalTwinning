@@ -1,12 +1,12 @@
 ########################################################################################################
-# This RDF Turtle file defines the semantic representation of a **residential HVAC zone**
-# that is modeled using a **1R1C1α grey-box thermal model**.
+# This RDF Turtle file defines the semantic representation of a residential HVAC zone
+# that is modeled using a 1R1C1α grey-box thermal model.
 #
 # It leverages the following ontologies and vocabularies:
-# - RC Ontology (https://github.com/matinabtahi/OperationalDigitalTwinning/blob/main/RCOnt.ttl)
-#   – to represent thermal dynamics and RC model structure
 # - ZoneOnt Ontology (https://github.com/matinabtahi/OperationalDigitalTwinning/blob/main/ZoneOnt.ttl)
 #   – to classify zone archetypes based on thermal behavior and occupancy type
+# - RC Ontology (https://github.com/matinabtahi/OperationalDigitalTwinning/blob/main/RCOnt.ttl)
+#   – to represent thermal dynamics and RC model structure
 # - Brick Schema (https://brickschema.org)
 #   – for sensors, points, and control system integration
 # - QUDT (http://qudt.org)
@@ -25,13 +25,11 @@
 # ontology-aware control in digital twin environments.
 ########################################################################################################
 
-
-
 @prefix brick: <https://brickschema.org/schema/1.1/Brick#> .
 @prefix qudt: <http://qudt.org/schema/qudt/> .
 @prefix unit: <http://qudt.org/vocab/unit/> .
 @prefix rcont: <https://matinabtahi.github.io/OperationalDigitalTwinning/RCOnt#> .
-@prefix zoneont: <https://matinabtahi.github.io/OperationalDigitalTwinning/ZoneOnt#>
+@prefix zoneont: <https://matinabtahi.github.io/OperationalDigitalTwinning/ZoneOnt#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix ex: <https://example.org/model#> .
@@ -39,7 +37,7 @@
 #################################################################
 # === ZONE SEMANTICS (ZoneOnt) ===
 #################################################################
-
+# === Zone Definition ===
 ex:Zone1 a brick:HVAC_Zone, zoneont:ThermalZone ;
     rdfs:label "My House" ;
     zoneont:hasThermalInteraction zoneont:MixedModeZone ;
@@ -55,14 +53,20 @@ ex:Zone1 a brick:HVAC_Zone, zoneont:ThermalZone ;
     zoneont:preferredHeatingRange "20–22°C" ;
     zoneont:preferredCoolingRange "24–26°C" .
 
+
 #################################################################
 # === SENSORS AND INPUTS (Brick) ===
 #################################################################
-
+# === Outdoor Sensors and Control Points ===
 ex:OutdoorTemp a brick:Outdoor_Air_Temperature_Sensor ;
     qudt:hasQuantityKind qudt:Temperature ;
     qudt:unit unit:DEG_C .
 
+ex:SolarIrradiance a brick:Solar_Irradiance_Sensor ;
+    qudt:hasQuantityKind qudt:Irradiance ;
+    qudt:unit unit:W-PER-M2 .
+
+# === Indoor Sensors and Control Points ===
 ex:IndoorTemp a brick:Zone_Air_Temperature_Sensor ;
     brick:isPointOf ex:Zone1 ;
     qudt:hasQuantityKind qudt:Temperature ;
@@ -73,23 +77,16 @@ ex:HeatInput a brick:Heating_Command ;
     qudt:hasQuantityKind qudt:Power ;
     qudt:unit unit:W .
 
-ex:SolarIrradiance a brick:Solar_Irradiance_Sensor ;
-    qudt:hasQuantityKind qudt:Irradiance ;
-    qudt:unit unit:W-PER-M2 .
 
 #################################################################
 # === RCOnt – Thermal Model Definition ===
 #################################################################
-
+# === 1R1C1α Model Definition ===
 ex:Zone1_RCModel a rcont:RCModel ;
     rdfs:label "Lumped 1R1C1α Thermal Model for Zone1" ;
     rcont:modelsZone ex:Zone1 ;
     rcont:hasInput ex:OutdoorTemp, ex:HeatInput, ex:SolarIrradiance ;
     rcont:hasState ex:IndoorTemp ;
-    rcont:hasNode ex:Zone1_LumpedNode ;
-    rcont:hasResistance ex:R_Zone1 ;
-    rcont:hasCapacitance ex:C_Zone1 ;
-    rcont:hasSolarAperture ex:Alpha_Zone1 ;
     rcont:governingEquation """
         C * dT_i/dt = (T_o - T_i)/R + α * G + Q
         where:
@@ -102,16 +99,14 @@ ex:Zone1_RCModel a rcont:RCModel ;
           α = solar aperture [m²]
     """ .
 
-#################################################################
-# === NODES AND PARAMETERS (RCOnt) ===
-#################################################################
-
+# === Lumped Indoor Node & Virtual Outdoor Node===
 ex:Zone1_LumpedNode a rcont:Node ;
     rdfs:label "Lumped Thermal Node for Zone1" .
 
 ex:OutdoorNode a rcont:Node ;
     rdfs:label "Outdoor Air Virtual Node" .
 
+# === RC Parameters ===
 ex:R_Zone1 a rcont:RValue ;
     rcont:numericValue "0.0075"^^xsd:decimal ;
     rcont:unit unit:K-PER-W ;
@@ -129,3 +124,9 @@ ex:Alpha_Zone1 a rcont:SolarAperture ;
     rcont:unit unit:M2 ;
     rcont:belongsToNode ex:Zone1_LumpedNode ;
     rdfs:label "Solar Aperture α (Zone1)" .
+
+# === Link Parameters to Model ===
+ex:Zone1_RCModel rcont:hasNode ex:Zone1_LumpedNode ;
+    rcont:hasResistance ex:R_Zone1 ;
+    rcont:hasCapacitance ex:C_Zone1 ;
+    rcont:hasSolarAperture ex:Alpha_Zone1 .
