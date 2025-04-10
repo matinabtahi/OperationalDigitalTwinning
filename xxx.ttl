@@ -1,0 +1,102 @@
+@prefix brick: <https://brickschema.org/schema/1.1/Brick#> .
+@prefix qudt: <http://qudt.org/schema/qudt/> .
+@prefix unit: <http://qudt.org/vocab/unit/> .
+@prefix rcont: <https://matinabtahi.github.io/OperationalDigitalTwinning/RCOnt#> .
+@prefix zoneont: <https://w3id.org/zoneont#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix ex: <https://example.org/model#> .
+
+#################################################################
+# === ZONE SEMANTICS (ZoneOnt) ===
+#################################################################
+
+ex:Zone1 a brick:HVAC_Zone, zoneont:ThermalZone ;
+    rdfs:label "My House" ;
+    zoneont:hasThermalInteraction zoneont:MixedModeZone ;
+    zoneont:hasOccupancyType zoneont:ResidentialZone ;
+    zoneont:floorArea 105.0 ;
+    zoneont:ceilingHeight 2.5 ;
+    zoneont:thermalMassLevel "Medium" ;
+    zoneont:windowToWallRatio 0.30 ;
+    zoneont:peakOccupancy 4 ;
+    zoneont:avgOccupancyHours 16.0 ;
+    zoneont:internalGainsDensity 6.5 ;
+    zoneont:ventilationRate 0.8 ;
+    zoneont:preferredHeatingRange "20–22°C" ;
+    zoneont:preferredCoolingRange "24–26°C" .
+
+#################################################################
+# === SENSORS AND INPUTS (Brick) ===
+#################################################################
+
+ex:OutdoorTemp a brick:Outdoor_Air_Temperature_Sensor ;
+    qudt:hasQuantityKind qudt:Temperature ;
+    qudt:unit unit:DEG_C .
+
+ex:IndoorTemp a brick:Zone_Air_Temperature_Sensor ;
+    brick:isPointOf ex:Zone1 ;
+    qudt:hasQuantityKind qudt:Temperature ;
+    qudt:unit unit:DEG_C .
+
+ex:HeatInput a brick:Heating_Command ;
+    brick:isPointOf ex:Zone1 ;
+    qudt:hasQuantityKind qudt:Power ;
+    qudt:unit unit:W .
+
+ex:SolarIrradiance a brick:Solar_Irradiance_Sensor ;
+    qudt:hasQuantityKind qudt:Irradiance ;
+    qudt:unit unit:W-PER-M2 .
+
+#################################################################
+# === RCOnt – Thermal Model Definition ===
+#################################################################
+
+ex:Zone1_RCModel a rcont:RCModel ;
+    rdfs:label "Lumped 1R1C1α Thermal Model for Zone1" ;
+    rcont:modelsZone ex:Zone1 ;
+    rcont:hasInput ex:OutdoorTemp, ex:HeatInput, ex:SolarIrradiance ;
+    rcont:hasState ex:IndoorTemp ;
+    rcont:hasNode ex:Zone1_LumpedNode ;
+    rcont:hasResistance ex:R_Zone1 ;
+    rcont:hasCapacitance ex:C_Zone1 ;
+    rcont:hasSolarAperture ex:Alpha_Zone1 ;
+    rcont:governingEquation """
+        C * dT_i/dt = (T_o - T_i)/R + α * G + Q
+        where:
+          T_i = indoor temperature [°C]
+          T_o = outdoor temperature [°C]
+          R = resistance [K/W]
+          C = capacitance [J/K]
+          Q = heating input [W]
+          G = solar irradiance [W/m²]
+          α = solar aperture [m²]
+    """ .
+
+#################################################################
+# === NODES AND PARAMETERS (RCOnt) ===
+#################################################################
+
+ex:Zone1_LumpedNode a rcont:Node ;
+    rdfs:label "Lumped Thermal Node for Zone1" .
+
+ex:OutdoorNode a rcont:Node ;
+    rdfs:label "Outdoor Air Virtual Node" .
+
+ex:R_Zone1 a rcont:RValue ;
+    rcont:numericValue "0.0075"^^xsd:decimal ;
+    rcont:unit unit:K-PER-W ;
+    rcont:connects ex:Zone1_LumpedNode, ex:OutdoorNode ;
+    rdfs:label "Thermal Resistance R (Zone1)" .
+
+ex:C_Zone1 a rcont:CValue ;
+    rcont:numericValue "15000"^^xsd:decimal ;
+    rcont:unit unit:J-PER-K ;
+    rcont:belongsToNode ex:Zone1_LumpedNode ;
+    rdfs:label "Thermal Capacitance C (Zone1)" .
+
+ex:Alpha_Zone1 a rcont:SolarAperture ;
+    rcont:numericValue "3.5"^^xsd:decimal ;
+    rcont:unit unit:M2 ;
+    rcont:belongsToNode ex:Zone1_LumpedNode ;
+    rdfs:label "Solar Aperture α (Zone1)" .
