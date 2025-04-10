@@ -1,0 +1,154 @@
+@prefix zoneont: <https://w3id.org/zoneont#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+#####################
+# Ontology Declaration
+#####################
+zoneont: a owl:Ontology ;
+    rdfs:label "ZoneOnt – Archetype Zones Ontology" ;
+    rdfs:comment "Semantic ontology for characterizing archetype thermal and functional zones in buildings, including energy modeling and control metadata." .
+
+#####################
+# Main Classes
+#####################
+
+zoneont:ThermalZone a owl:Class ;
+    rdfs:label "Thermal Zone" ;
+    rdfs:comment "Spatial volume with defined thermal and functional characteristics." .
+
+zoneont:ThermalInteraction a owl:Class ;
+    rdfs:label "Thermal Interaction" ;
+    rdfs:comment "Dominant heat transfer characteristics of the zone (e.g., convective, radiative)." .
+
+zoneont:OccupancyType a owl:Class ;
+    rdfs:label "Occupancy Type" ;
+    rdfs:comment "Functional use of the zone (residential, commercial, etc.)." .
+
+#####################
+# Subclasses: Thermal Interaction
+#####################
+
+zoneont:ConvectiveZone a owl:Class ;
+    rdfs:subClassOf zoneont:ThermalInteraction ;
+    rdfs:label "Convective Zone" ;
+    rdfs:comment "Zone with primarily convective heat transfer (e.g., via forced air)." .
+
+zoneont:RadiativeZone a owl:Class ;
+    rdfs:subClassOf zoneont:ThermalInteraction ;
+    rdfs:label "Radiative Zone" ;
+    rdfs:comment "Zone with radiant systems such as underfloor heating." .
+
+zoneont:MixedModeZone a owl:Class ;
+    rdfs:subClassOf zoneont:ThermalInteraction ;
+    rdfs:label "Mixed Mode Zone" ;
+    rdfs:comment "Zone combining both convective and radiative mechanisms." .
+
+zoneont:PassiveZone a owl:Class ;
+    rdfs:subClassOf zoneont:ThermalInteraction ;
+    rdfs:label "Passive Zone" ;
+    rdfs:comment "Zone with no active heating or cooling systems." .
+
+#####################
+# Subclasses: Occupancy Types
+#####################
+
+zoneont:ResidentialZone a owl:Class ;
+    rdfs:subClassOf zoneont:OccupancyType ;
+    rdfs:label "Residential Zone" ;
+    rdfs:comment "Zone in a home, apartment, or dormitory." .
+
+zoneont:CommercialZone a owl:Class ;
+    rdfs:subClassOf zoneont:OccupancyType ;
+    rdfs:label "Commercial Zone" ;
+    rdfs:comment "Zone in office buildings, shops, or malls." .
+
+zoneont:InstitutionalZone a owl:Class ;
+    rdfs:subClassOf zoneont:OccupancyType ;
+    rdfs:label "Institutional Zone" ;
+    rdfs:comment "Zone in a school, university, hospital, etc." .
+
+zoneont:IndustrialZone a owl:Class ;
+    rdfs:subClassOf zoneont:OccupancyType ;
+    rdfs:label "Industrial Zone" ;
+    rdfs:comment "Factory floors, production areas, warehouses." .
+
+zoneont:MixedUseZone a owl:Class ;
+    rdfs:subClassOf zoneont:OccupancyType ;
+    rdfs:label "Mixed-Use Zone" ;
+    rdfs:comment "Zone used for multiple purposes (e.g., retail on ground floor, residential above)." .
+
+zoneont:ServiceZone a owl:Class ;
+    rdfs:subClassOf zoneont:OccupancyType ;
+    rdfs:label "Service Zone" ;
+    rdfs:comment "Mechanical rooms, corridors, stairwells, etc." .
+
+#####################
+# Object Properties
+#####################
+
+zoneont:hasThermalInteraction a owl:ObjectProperty ;
+    rdfs:domain zoneont:ThermalZone ;
+    rdfs:range zoneont:ThermalInteraction ;
+    rdfs:comment "Relates a zone to its thermal behavior." .
+
+zoneont:hasOccupancyType a owl:ObjectProperty ;
+    rdfs:domain zoneont:ThermalZone ;
+    rdfs:range zoneont:OccupancyType ;
+    rdfs:comment "Relates a zone to its usage category." .
+
+#####################
+# Datatype Properties – ThermalZone Parameters
+#####################
+
+zoneont:floorArea a owl:DatatypeProperty ;
+    rdfs:domain zoneont:ThermalZone ;
+    rdfs:range xsd:float ;
+    rdfs:comment "Zone area in m²." .
+
+zoneont:ceilingHeight a owl:DatatypeProperty ;
+    rdfs:domain zoneont:ThermalZone ;
+    rdfs:range xsd:float ;
+    rdfs:comment "Ceiling height in meters." .
+
+zoneont:thermalMassLevel a owl:DatatypeProperty ;
+    rdfs:domain zoneont:ThermalZone ;
+    rdfs:range xsd:string ;
+    rdfs:comment "Qualitative or numeric indication of thermal mass (e.g., high/medium/low or J/°C)." .
+
+zoneont:windowToWallRatio a owl:DatatypeProperty ;
+    rdfs:domain zoneont:ThermalZone ;
+    rdfs:range xsd:float ;
+    rdfs:comment "Glazing ratio (0–1) for the zone." .
+
+zoneont:peakOccupancy a owl:DatatypeProperty ;
+    rdfs:domain zoneont:ThermalZone ;
+    rdfs:range xsd:integer ;
+    rdfs:comment "Maximum number of occupants during operation." .
+
+zoneont:avgOccupancyHours a owl:DatatypeProperty ;
+    rdfs:domain zoneont:ThermalZone ;
+    rdfs:range xsd:float ;
+    rdfs:comment "Average daily occupancy duration (hours/day)." .
+
+zoneont:internalGainsDensity a owl:DatatypeProperty ;
+    rdfs:domain zoneont:ThermalZone ;
+    rdfs:range xsd:float ;
+    rdfs:comment "Internal heat gains per area (W/m²), from equipment, lighting, people." .
+
+zoneont:ventilationRate a owl:DatatypeProperty ;
+    rdfs:domain zoneont:ThermalZone ;
+    rdfs:range xsd:float ;
+    rdfs:comment "Ventilation rate in ACH (air changes per hour)." .
+
+zoneont:preferredHeatingRange a owl:DatatypeProperty ;
+    rdfs:domain zoneont:ThermalZone ;
+    rdfs:range xsd:string ;
+    rdfs:comment "Typical heating setpoint range, e.g., '20–22°C'." .
+
+zoneont:preferredCoolingRange a owl:DatatypeProperty ;
+    rdfs:domain zoneont:ThermalZone ;
+    rdfs:range xsd:string ;
+    rdfs:comment "Typical cooling setpoint range, e.g., '24–26°C'." .
