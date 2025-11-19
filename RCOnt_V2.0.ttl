@@ -1,0 +1,538 @@
+@prefix : <https://matinabtahi.github.io/OperationalDigitalTwinning/RCOnt#> .
+@prefix rcont: <https://matinabtahi.github.io/OperationalDigitalTwinning/RCOnt#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix qudt: <http://qudt.org/schema/qudt/> .
+@prefix unit: <http://qudt.org/vocab/unit/> .
+
+@prefix brick: <https://brickschema.org/schema/1.1/Brick#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix saref: <https://saref.etsi.org/core/> .
+
+#####################
+# Ontology Declaration / Versioning
+#####################
+
+<https://matinabtahi.github.io/OperationalDigitalTwinning/RCOnt>
+    a owl:Ontology ;
+    rdfs:label "RC Ontology (RCOnt)" ;
+    rdfs:comment "A semantic ontology to describe reduced-order thermal RC models for building zones, including states, parameters, control inputs, disturbances, simulation runs, calibration, and performance evaluation. Version 2.0 introduces control/actuation semantics, provenance of parameters, temporal validity, explicit connection directionality, uncertainty, and performance metrics for predictive control evaluation." ;
+    owl:versionIRI <https://matinabtahi.github.io/OperationalDigitalTwinning/RCOnt/2.0> ;
+    owl:priorVersion <https://matinabtahi.github.io/OperationalDigitalTwinning/RCOnt/1.0> ;
+    owl:versionInfo "RCOnt v2.0" .
+
+#####################
+### Core Physical / Thermal Classes
+#####################
+
+rcont:RCModel a owl:Class ;
+    rdfs:label "RC Model" ;
+    rdfs:comment "A thermal RC model describing the dynamic energy balance of a zone; defines nodes, resistances, capacitances, and gains. Represents the model structure, not a single simulation run." .
+
+rcont:Node a owl:Class ;
+    rdfs:label "Thermal Node" ;
+    rdfs:comment "A thermal node (state variable) representing a thermodynamic mass with temperature, e.g. indoor air, wall mass, slab, etc." .
+
+rcont:AirNode a owl:Class ;
+    rdfs:subClassOf rcont:Node ;
+    rdfs:label "Air Node" ;
+    rdfs:comment "Zone air temperature node in a thermal RC model. Typically aligned with a measured zone air temperature sensor." .
+
+rcont:EnvelopeNode a owl:Class ;
+    rdfs:subClassOf rcont:Node ;
+    rdfs:label "Envelope Node" ;
+    rdfs:comment "Thermal mass node representing the building envelope (walls, windows, slab). Exchanges heat with other nodes through resistances and stores heat via capacitance." .
+
+rcont:RValue a owl:Class ;
+    rdfs:label "Thermal Resistance" ;
+    rdfs:comment "Lumped thermal resistance (K/W) between two thermal nodes. Controls conductive/convective heat flow between nodes." .
+
+rcont:CValue a owl:Class ;
+    rdfs:label "Thermal Capacitance" ;
+    rdfs:comment "Lumped thermal capacitance (J/K) of a node. Represents heat storage capacity of the node mass." .
+
+rcont:SolarAperture a owl:Class ;
+    rdfs:label "Solar Aperture" ;
+    rdfs:comment "Effective solar gain coupling term. Represents effective solar-irradiance-to-heat-gain area (m²) applied to a receiving node." .
+
+#####################
+### New Classes for Control / Disturbances / Operation
+#####################
+
+rcont:Actuator a owl:Class ;
+    rdfs:label "Actuator" ;
+    rdfs:comment "A controllable device, control signal, or actuator affecting the RC model (e.g. reheat valve, VAV damper position, heater power command, fan speed). May correspond to a Brick command point." .
+
+rcont:Disturbance a owl:Class ;
+    rdfs:label "Disturbance" ;
+    rdfs:comment "An exogenous influence not directly actuated but affecting the thermal dynamics, e.g. occupancy load, plug load, weather, solar irradiance." .
+
+rcont:OccupancyLoad a owl:Class ;
+    rdfs:subClassOf rcont:Disturbance ;
+    rdfs:label "Occupancy Load" ;
+    rdfs:comment "Internal gains due to occupants (sensible heat, W)." .
+
+rcont:WeatherDisturbance a owl:Class ;
+    rdfs:subClassOf rcont:Disturbance ;
+    rdfs:label "Weather Disturbance" ;
+    rdfs:comment "Weather-related exogenous inputs such as outdoor air temperature or direct solar irradiance." .
+
+#####################
+### New Classes for Simulation / Calibration / Performance
+#####################
+
+rcont:SimulationRun a owl:Class ;
+    rdfs:label "Simulation Run" ;
+    rdfs:comment "An execution of an RCModel with specified inputs, timestep, and horizon. Produces predicted trajectories of node temperatures and energy flows." ;
+    rdfs:subClassOf prov:Activity .
+
+rcont:ParameterEstimation a owl:Class ;
+    rdfs:label "Parameter Estimation" ;
+    rdfs:comment "Calibration or identification process that infers parameter values (R, C, solar aperture, etc.) from observed data (historical telemetry, experiment, etc.)." ;
+    rdfs:subClassOf prov:Activity .
+
+rcont:PerformanceMetric a owl:Class ;
+    rdfs:label "Performance Metric" ;
+    rdfs:comment "A quantitative measure of model or controller quality, e.g. RMSE of temperature prediction, energy use error, comfort violation duration." .
+
+rcont:RMSE a owl:Class ;
+    rdfs:subClassOf rcont:PerformanceMetric ;
+    rdfs:label "Root Mean Square Error" ;
+    rdfs:comment "RMSE of predicted vs. measured temperature in Kelvin or Celsius." .
+
+rcont:EnergyUseError a owl:Class ;
+    rdfs:subClassOf rcont:PerformanceMetric ;
+    rdfs:label "Energy Use Error" ;
+    rdfs:comment "Error between predicted and actual energy/heat flow over a horizon." .
+
+#####################
+### Provenance / Version / Temporal Validity
+#####################
+
+rcont:ModelVersion a owl:Class ;
+    rdfs:label "Model Version" ;
+    rdfs:comment "A versioned configuration of an RCModel, including parameter values and metadata such as when it is valid (season, occupancy mode, retrofit state)." ;
+    rdfs:subClassOf prov:Entity .
+
+rcont:ValidityInterval a owl:Class ;
+    rdfs:label "Validity Interval" ;
+    rdfs:comment "A time interval (start/end) indicating during which period a model version is considered valid or calibrated." ;
+    rdfs:subClassOf time:TemporalEntity .
+
+#####################
+### Core Object Properties (Structural / Physical)
+#####################
+
+rcont:hasNode a owl:ObjectProperty ;
+    rdfs:domain rcont:RCModel ;
+    rdfs:range rcont:Node ;
+    rdfs:label "has Node" ;
+    rdfs:comment "Associates an RC model with one of its thermal nodes." .
+
+rcont:isNodeOf a owl:ObjectProperty ;
+    owl:inverseOf rcont:hasNode ;
+    rdfs:domain rcont:Node ;
+    rdfs:range rcont:RCModel ;
+    rdfs:label "is Node Of" ;
+    rdfs:comment "Inverse link from Node back to RCModel." .
+
+rcont:hasResistance a owl:ObjectProperty ;
+    rdfs:domain rcont:RCModel ;
+    rdfs:range rcont:RValue ;
+    rdfs:label "has Resistance" ;
+    rdfs:comment "Associates an RC model with one of its thermal resistances." .
+
+rcont:isResistanceOf a owl:ObjectProperty ;
+    owl:inverseOf rcont:hasResistance ;
+    rdfs:domain rcont:RValue ;
+    rdfs:range rcont:RCModel ;
+    rdfs:label "is Resistance Of" .
+
+rcont:hasCapacitance a owl:ObjectProperty ;
+    rdfs:domain rcont:RCModel ;
+    rdfs:range rcont:CValue ;
+    rdfs:label "has Capacitance" ;
+    rdfs:comment "Associates an RC model with one of its thermal capacitances." .
+
+rcont:isCapacitanceOf a owl:ObjectProperty ;
+    owl:inverseOf rcont:hasCapacitance ;
+    rdfs:domain rcont:CValue ;
+    rdfs:range rcont:RCModel ;
+    rdfs:label "is Capacitance Of" .
+
+rcont:hasSolarAperture a owl:ObjectProperty ;
+    rdfs:domain rcont:RCModel ;
+    rdfs:range rcont:SolarAperture ;
+    rdfs:label "has Solar Aperture" ;
+    rdfs:comment "Associates an RC model with a solar aperture term." .
+
+rcont:isSolarApertureOf a owl:ObjectProperty ;
+    owl:inverseOf rcont:hasSolarAperture ;
+    rdfs:domain rcont:SolarAperture ;
+    rdfs:range rcont:RCModel ;
+    rdfs:label "is Solar Aperture Of" .
+
+#####################
+### Connection Semantics (improved)
+#####################
+
+# Previous ontology had rcont:connects used twice. We now give direction.
+# Interpretation: connectsFrom -> connectsTo is the thermal path direction
+# for power flow calculation, but physical R is symmetric. The asymmetry is for reasoning.
+
+rcont:connectsFrom a owl:ObjectProperty ;
+    rdfs:domain rcont:RValue ;
+    rdfs:range rcont:Node ;
+    rdfs:label "connects From Node" ;
+    rdfs:comment "Identifies one endpoint node of a thermal resistance." .
+
+rcont:connectsTo a owl:ObjectProperty ;
+    rdfs:domain rcont:RValue ;
+    rdfs:range rcont:Node ;
+    rdfs:label "connects To Node" ;
+    rdfs:comment "Identifies the other endpoint node of a thermal resistance." .
+
+# Still allow an undirected convenience property
+rcont:connectsNode a owl:ObjectProperty ;
+    rdfs:domain rcont:RValue ;
+    rdfs:range rcont:Node ;
+    rdfs:label "connects Node" ;
+    rdfs:comment "Generic link to a node that this resistance touches. Used twice per RValue individual for simple graph queries." .
+
+# Capacitance and solar aperture belong to exactly one node
+rcont:belongsToNode a owl:ObjectProperty ;
+    rdfs:domain [ a owl:Class ;
+        owl:unionOf ( rcont:CValue rcont:SolarAperture ) ] ;
+    rdfs:range rcont:Node ;
+    rdfs:label "belongs To Node" ;
+    rdfs:comment "Indicates which node stores the heat capacity or receives solar gain through this term." .
+
+#####################
+### Operational / Control Properties
+#####################
+
+rcont:modelsZone a owl:ObjectProperty ;
+    rdfs:domain rcont:RCModel ;
+    rdfs:range brick:HVAC_Zone ;
+    rdfs:label "models Zone" ;
+    rdfs:comment "Links an RC model to the Brick HVAC zone it represents." .
+
+rcont:hasInput a owl:ObjectProperty ;
+    rdfs:domain rcont:RCModel ;
+    rdfs:range brick:Point ;
+    rdfs:label "has Input" ;
+    rdfs:comment "Associates an RC model with an exogenous input signal such as outdoor air temperature, solar irradiance, or heating power command. For controllable signals, also link to Actuator." .
+
+rcont:hasState a owl:ObjectProperty ;
+    rdfs:domain rcont:RCModel ;
+    rdfs:range brick:Point ;
+    rdfs:label "has State" ;
+    rdfs:comment "Links an RC model to a measurable state variable, such as the air temperature sensor point for a zone." .
+
+rcont:controlledBy a owl:ObjectProperty ;
+    rdfs:domain rcont:RCModel ;
+    rdfs:range rcont:Actuator ;
+    rdfs:label "controlled By" ;
+    rdfs:comment "Indicates which actuator(s) directly influence this model via control inputs, e.g. valve position, fan speed, heater command." .
+
+rcont:actuates a owl:ObjectProperty ;
+    owl:inverseOf rcont:controlledBy ;
+    rdfs:domain rcont:Actuator ;
+    rdfs:range rcont:RCModel ;
+    rdfs:label "actuates" ;
+    rdfs:comment "Inverse link from an Actuator to the RCModel it influences." .
+
+rcont:hasDisturbance a owl:ObjectProperty ;
+    rdfs:domain rcont:RCModel ;
+    rdfs:range rcont:Disturbance ;
+    rdfs:label "has Disturbance" ;
+    rdfs:comment "Associates an RCModel with a disturbance source, such as occupancy or solar load, that affects thermal balance and is not directly actuated." .
+
+#####################
+### Simulation / Calibration / Performance Properties
+#####################
+
+rcont:simulatesModel a owl:ObjectProperty ;
+    rdfs:domain rcont:SimulationRun ;
+    rdfs:range rcont:RCModel ;
+    rdfs:label "simulates Model" ;
+    rdfs:comment "Identifies which RCModel was executed in this SimulationRun." .
+
+rcont:hasTimestep a owl:DatatypeProperty ;
+    rdfs:domain rcont:SimulationRun ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "has Timestep" ;
+    rdfs:comment "Simulation time step size (in seconds) used in a SimulationRun." .
+
+rcont:hasPredictionHorizon a owl:DatatypeProperty ;
+    rdfs:domain rcont:SimulationRun ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "has Prediction Horizon" ;
+    rdfs:comment "Prediction horizon length (in seconds) for a SimulationRun (e.g. MPC forecast horizon)." .
+
+rcont:producedMetric a owl:ObjectProperty ;
+    rdfs:domain rcont:SimulationRun ;
+    rdfs:range rcont:PerformanceMetric ;
+    rdfs:label "produced Metric" ;
+    rdfs:comment "Links a SimulationRun to resulting performance metrics such as temperature RMSE or energy-use error." .
+
+rcont:estimatesParameterOf a owl:ObjectProperty ;
+    rdfs:domain rcont:ParameterEstimation ;
+    rdfs:range rcont:RCModel ;
+    rdfs:label "estimates Parameter Of" ;
+    rdfs:comment "Indicates which RCModel was the target of this ParameterEstimation process." .
+
+rcont:estimatedValue a owl:ObjectProperty ;
+    rdfs:domain rcont:ParameterEstimation ;
+    rdfs:range [ a owl:Class ;
+        owl:unionOf ( rcont:RValue rcont:CValue rcont:SolarAperture ) ] ;
+    rdfs:label "estimated Value" ;
+    rdfs:comment "Links a ParameterEstimation activity to the parameter individuals (R, C, SolarAperture) whose numeric values were estimated." .
+
+rcont:usesMeasurement a owl:ObjectProperty ;
+    rdfs:domain rcont:ParameterEstimation ;
+    rdfs:range brick:Point ;
+    rdfs:label "uses Measurement" ;
+    rdfs:comment "Sensor or telemetry point used as ground truth during parameter estimation / calibration." .
+
+#####################
+### Provenance / Version / Temporal Validity Properties
+#####################
+
+rcont:hasModelVersion a owl:ObjectProperty ;
+    rdfs:domain rcont:RCModel ;
+    rdfs:range rcont:ModelVersion ;
+    rdfs:label "has Model Version" ;
+    rdfs:comment "Associates an RCModel with a specific parameterized version snapshot." .
+
+rcont:versionOfModel a owl:ObjectProperty ;
+    owl:inverseOf rcont:hasModelVersion ;
+    rdfs:domain rcont:ModelVersion ;
+    rdfs:range rcont:RCModel ;
+    rdfs:label "version Of Model" ;
+    rdfs:comment "Inverse link from a ModelVersion to the RCModel it instantiates." .
+
+rcont:validDuring a owl:ObjectProperty ;
+    rdfs:domain rcont:ModelVersion ;
+    rdfs:range rcont:ValidityInterval ;
+    rdfs:label "valid During" ;
+    rdfs:comment "Links a model version to the time interval (e.g. season, occupancy schedule, post-retrofit period) when it is valid." .
+
+rcont:hasStartTime a owl:ObjectProperty ;
+    rdfs:domain rcont:ValidityInterval ;
+    rdfs:range time:Instant ;
+    rdfs:label "has Start Time" ;
+    rdfs:comment "Start timestamp for a ValidityInterval." .
+
+rcont:hasEndTime a owl:ObjectProperty ;
+    rdfs:domain rcont:ValidityInterval ;
+    rdfs:range time:Instant ;
+    rdfs:label "has End Time" ;
+    rdfs:comment "End timestamp for a ValidityInterval (optional for 'currently valid')." .
+
+#####################
+### Parameter Value Semantics / Metadata
+#####################
+
+rcont:numericValue a owl:DatatypeProperty ;
+    rdfs:domain [ a owl:Class ;
+        owl:unionOf ( rcont:RValue rcont:CValue rcont:SolarAperture rcont:PerformanceMetric ) ] ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "numeric Value" ;
+    rdfs:comment "Numeric magnitude of a physical parameter (R, C, solar aperture) or metric value (e.g. RMSE). Unit specified separately via rcont:unit." .
+
+rcont:unit a owl:ObjectProperty ;
+    rdfs:domain [ a owl:Class ;
+        owl:unionOf ( rcont:RValue rcont:CValue rcont:SolarAperture rcont:PerformanceMetric rcont:Disturbance ) ] ;
+    rdfs:range qudt:Unit ;
+    rdfs:label "unit" ;
+    rdfs:comment "Links a parameter or metric to its physical unit (from QUDT). Examples: unit:K-PER-WATT for resistance, unit:J-PER-K for capacitance, unit:WATT for occupancy heat gain, unit:Celsius for RMSE, unit:M2 for solar aperture)." .
+
+rcont:uncertaintyStdDev a owl:DatatypeProperty ;
+    rdfs:domain [ a owl:Class ;
+        owl:unionOf ( rcont:RValue rcont:CValue rcont:SolarAperture rcont:PerformanceMetric ) ] ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "uncertainty StdDev" ;
+    rdfs:comment "Standard deviation or similar measure of identified parameter uncertainty, same unit as numericValue." .
+
+rcont:measuredBy a owl:ObjectProperty ;
+    rdfs:domain [ a owl:Class ;
+        owl:unionOf ( rcont:RValue rcont:CValue rcont:SolarAperture rcont:PerformanceMetric ) ] ;
+    rdfs:range prov:Activity ;
+    rdfs:label "measured By" ;
+    rdfs:comment "Provenance link from a parameter or metric to the activity (e.g. ParameterEstimation, SimulationRun) that generated or measured it." .
+
+rcont:dataSource a owl:ObjectProperty ;
+    rdfs:domain [ a owl:Class ;
+        owl:unionOf ( rcont:RValue rcont:CValue rcont:SolarAperture rcont:PerformanceMetric rcont:Disturbance ) ] ;
+    rdfs:range prov:Entity ;
+    rdfs:label "data Source" ;
+    rdfs:comment "Indicates the originating dataset, sensor log, or forecast source used to derive this value or disturbance profile." .
+
+#####################
+### Annotation / Documentation Properties
+#####################
+
+rcont:governingEquation a owl:AnnotationProperty ;
+    rdfs:label "governing Equation" ;
+    rdfs:comment "Textual or symbolic representation of the governing physical dynamics (state-space, ODE, energy balance). Intended for human readability, not machine algebra." .
+
+rcont:description a owl:AnnotationProperty ;
+    rdfs:label "description" ;
+    rdfs:comment "Human-readable explanatory note." .
+
+#####################
+### Alignment / Interoperability Hints
+#####################
+
+# These are not strict equivalences (owl:equivalentClass) because different ontologies slice reality differently.
+# We provide rdfs:seeAlso to align concepts for downstream tooling.
+
+rcont:Actuator rdfs:seeAlso brick:Command .
+rcont:Disturbance rdfs:seeAlso saref:Property .
+rcont:Node rdfs:seeAlso brick:Physical_Object .
+rcont:SimulationRun rdfs:seeAlso prov:Activity .
+rcont:ModelVersion rdfs:seeAlso prov:Entity .
+
+#####################
+### Logical Constraints / Restrictions (OWL axioms)
+#####################
+
+# Each RValue must connect exactly two Nodes via connectsFrom / connectsTo.
+rcont:RValue
+    rdfs:subClassOf
+        [ a owl:Restriction ;
+          owl:onProperty rcont:connectsFrom ;
+          owl:cardinality "1"^^xsd:nonNegativeInteger
+        ] ,
+        [ a owl:Restriction ;
+          owl:onProperty rcont:connectsTo ;
+          owl:cardinality "1"^^xsd:nonNegativeInteger
+        ] ,
+        [ a owl:Restriction ;
+          owl:onProperty rcont:numericValue ;
+          owl:someValuesFrom xsd:decimal
+        ] ,
+        [ a owl:Restriction ;
+          owl:onProperty rcont:unit ;
+          owl:someValuesFrom qudt:Unit
+        ] .
+
+# Each CValue belongs to exactly one Node and has a numericValue+unit.
+rcont:CValue
+    rdfs:subClassOf
+        [ a owl:Restriction ;
+          owl:onProperty rcont:belongsToNode ;
+          owl:cardinality "1"^^xsd:nonNegativeInteger
+        ] ,
+        [ a owl:Restriction ;
+          owl:onProperty rcont:numericValue ;
+          owl:someValuesFrom xsd:decimal
+        ] ,
+        [ a owl:Restriction ;
+          owl:onProperty rcont:unit ;
+          owl:someValuesFrom qudt:Unit
+        ] .
+
+# Each SolarAperture belongs to exactly one Node and has numericValue+unit.
+rcont:SolarAperture
+    rdfs:subClassOf
+        [ a owl:Restriction ;
+          owl:onProperty rcont:belongsToNode ;
+          owl:cardinality "1"^^xsd:nonNegativeInteger
+        ] ,
+        [ a owl:Restriction ;
+          owl:onProperty rcont:numericValue ;
+          owl:someValuesFrom xsd:decimal
+        ] ,
+        [ a owl:Restriction ;
+          owl:onProperty rcont:unit ;
+          owl:someValuesFrom qudt:Unit
+        ] .
+
+# RCModel must have at least one Node, and may have R, C, Solar Aperture.
+rcont:RCModel
+    rdfs:subClassOf
+        [ a owl:Restriction ;
+          owl:onProperty rcont:hasNode ;
+          owl:minCardinality "1"^^xsd:nonNegativeInteger
+        ] ,
+        [ a owl:Restriction ;
+          owl:onProperty rcont:modelsZone ;
+          owl:maxCardinality "1"^^xsd:nonNegativeInteger
+        ] .
+
+# SimulationRun must simulate a model.
+rcont:SimulationRun
+    rdfs:subClassOf
+        [ a owl:Restriction ;
+          owl:onProperty rcont:simulatesModel ;
+          owl:minCardinality "1"^^xsd:nonNegativeInteger
+        ] .
+
+# ModelVersion must refer to one RCModel and one ValidityInterval.
+rcont:ModelVersion
+    rdfs:subClassOf
+        [ a owl:Restriction ;
+          owl:onProperty rcont:versionOfModel ;
+          owl:cardinality "1"^^xsd:nonNegativeInteger
+        ] ,
+        [ a owl:Restriction ;
+          owl:onProperty rcont:validDuring ;
+          owl:cardinality "1"^^xsd:nonNegativeInteger
+        ] .
+
+# ValidityInterval should have exactly one start instant and at most one end instant.
+rcont:ValidityInterval
+    rdfs:subClassOf
+        [ a owl:Restriction ;
+          owl:onProperty rcont:hasStartTime ;
+          owl:cardinality "1"^^xsd:nonNegativeInteger
+        ] ,
+        [ a owl:Restriction ;
+          owl:onProperty rcont:hasEndTime ;
+          owl:maxCardinality "1"^^xsd:nonNegativeInteger
+        ] .
+
+#####################
+### Convenience Datatype Properties
+#####################
+
+rcont:label a owl:DatatypeProperty ;
+    rdfs:label "label" ;
+    rdfs:comment "Human-readable label for UI or graph inspection. This can duplicate rdfs:label for downstream tooling that expects a data property." ;
+    rdfs:domain owl:Thing ;
+    rdfs:range xsd:string .
+
+rcont:notes a owl:DatatypeProperty ;
+    rdfs:label "notes" ;
+    rdfs:comment "Free-form notes or comments." ;
+    rdfs:domain owl:Thing ;
+    rdfs:range xsd:string .
+
+#####################
+### Example Units (not axioms, just documented individuals)
+#####################
+
+# You can define canonical units you expect:
+#   Resistance in K/W
+#   Capacitance in J/K
+#   Solar aperture in m2
+#   Occupancy load in W
+#   RMSE in K (or degC)
+#
+# These come from QUDT so you don't HAVE to create them here, but you can reference them like:
+#
+#   unit:K-PER-WATT
+#   unit:J-PER-K
+#   unit:M2
+#   unit:W
+#   unit:K
+#
+# This comment block intentionally does not instantiate individuals, but encodes modeling expectations.
+
+#####################
+### End of Ontology
+#####################
