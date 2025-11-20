@@ -5,7 +5,6 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix qudt: <http://qudt.org/schema/qudt/> .
 @prefix unit: <http://qudt.org/vocab/unit/> .
-
 @prefix brick: <https://brickschema.org/schema/1.1/Brick#> .
 @prefix prov: <http://www.w3.org/ns/prov#> .
 @prefix time: <http://www.w3.org/2006/time#> .
@@ -45,11 +44,11 @@ rcont:EnvelopeNode a owl:Class ;
     rdfs:label "Envelope Node" ;
     rdfs:comment "Thermal mass node representing the building envelope (walls, windows, slab). Exchanges heat with other nodes through resistances and stores heat via capacitance." .
 
-rcont:RValue a owl:Class ;
+rcont:ThermalResistance a owl:Class ;
     rdfs:label "Thermal Resistance" ;
     rdfs:comment "Lumped thermal resistance (K/W) between two thermal nodes. Controls conductive/convective heat flow between nodes." .
 
-rcont:CValue a owl:Class ;
+rcont:ThermalCapacitance a owl:Class ;
     rdfs:label "Thermal Capacitance" ;
     rdfs:comment "Lumped thermal capacitance (J/K) of a node. Represents heat storage capacity of the node mass." .
 
@@ -58,7 +57,7 @@ rcont:SolarAperture a owl:Class ;
     rdfs:comment "Effective solar gain coupling term. Represents effective solar-irradiance-to-heat-gain area (m²) applied to a receiving node." .
 
 #####################
-### New Classes for Control / Disturbances / Operation
+### Control / Disturbances / Operation Classes — v2.0 Addition
 #####################
 
 rcont:Actuator a owl:Class ;
@@ -80,7 +79,7 @@ rcont:WeatherDisturbance a owl:Class ;
     rdfs:comment "Weather-related exogenous inputs such as outdoor air temperature or direct solar irradiance." .
 
 #####################
-### New Classes for Simulation / Calibration / Performance
+### Simulation / Calibration / Performance Classes — v2.0 Addition
 #####################
 
 rcont:SimulationRun a owl:Class ;
@@ -108,12 +107,12 @@ rcont:EnergyUseError a owl:Class ;
     rdfs:comment "Error between predicted and actual energy/heat flow over a horizon." .
 
 #####################
-### Provenance / Version / Temporal Validity
+### Provenance / Version / Temporal Validity — v2.0 Addition
 #####################
 
 rcont:ModelVersion a owl:Class ;
     rdfs:label "Model Version" ;
-    rdfs:comment "A versioned configuration of an RCModel, including parameter values and metadata such as when it is valid (season, occupancy mode, retrofit state)." ;
+    rdfs:comment "A versioned configuration of an RCModel, including parameters and metadata such as when it is valid (season, occupancy mode, retrofit state)." ;
     rdfs:subClassOf prov:Entity .
 
 rcont:ValidityInterval a owl:Class ;
@@ -122,7 +121,7 @@ rcont:ValidityInterval a owl:Class ;
     rdfs:subClassOf time:TemporalEntity .
 
 #####################
-### Core Object Properties (Structural / Physical)
+### Core Structural / Physical Object Properties
 #####################
 
 rcont:hasNode a owl:ObjectProperty ;
@@ -175,12 +174,27 @@ rcont:isSolarApertureOf a owl:ObjectProperty ;
     rdfs:label "is Solar Aperture Of" .
 
 #####################
-### Connection Semantics (improved)
+### Connection Semantics — v2.0 Revision
 #####################
 
-# Previous ontology had rcont:connects used twice. We now give direction.
-# Interpretation: connectsFrom -> connectsTo is the thermal path direction
-# for power flow calculation, but physical R is symmetric. The asymmetry is for reasoning.
+# In earlier versions of the ontology, thermal resistances were
+# associated with their adjacent nodes using the non-directional
+# property `rcont:connects`, asserted twice per resistance.
+#
+# In v2.0, this design has been refined by introducing 
+# `rcont:connectsFrom` and `rcont:connectsTo`. These properties
+# provide an ordered representation of the two endpoint nodes
+# associated with each thermal resistance component.
+#
+# The directionality is not intended to imply any physical 
+# asymmetry—thermal conduction remains bidirectional. Rather, 
+# the ordering facilitates more precise logical modelling,
+# unambiguous adjacency interpretation, and automated reasoning
+# tasks such as model graph extraction and equation assembly.
+#
+# Thus, the directional properties serve organizational and 
+# computational clarity while preserving the physically 
+# symmetric nature of the thermal pathway.
 
 rcont:connectsFrom a owl:ObjectProperty ;
     rdfs:domain rcont:RValue ;
@@ -210,7 +224,7 @@ rcont:belongsToNode a owl:ObjectProperty ;
     rdfs:comment "Indicates which node stores the heat capacity or receives solar gain through this term." .
 
 #####################
-### Operational / Control Properties
+### Operational / Control Properties — v2.0 Revision
 #####################
 
 rcont:modelsZone a owl:ObjectProperty ;
@@ -251,7 +265,7 @@ rcont:hasDisturbance a owl:ObjectProperty ;
     rdfs:comment "Associates an RCModel with a disturbance source, such as occupancy or solar load, that affects thermal balance and is not directly actuated." .
 
 #####################
-### Simulation / Calibration / Performance Properties
+### Simulation / Calibration / Performance Properties — v2.0 Revision
 #####################
 
 rcont:simulatesModel a owl:ObjectProperty ;
@@ -298,7 +312,7 @@ rcont:usesMeasurement a owl:ObjectProperty ;
     rdfs:comment "Sensor or telemetry point used as ground truth during parameter estimation / calibration." .
 
 #####################
-### Provenance / Version / Temporal Validity Properties
+### Provenance / Version / Temporal Validity Properties — v2.0 Addition
 #####################
 
 rcont:hasModelVersion a owl:ObjectProperty ;
@@ -333,7 +347,7 @@ rcont:hasEndTime a owl:ObjectProperty ;
     rdfs:comment "End timestamp for a ValidityInterval (optional for 'currently valid')." .
 
 #####################
-### Parameter Value Semantics / Metadata
+### Parameter Value Semantics / Metadata — v2.0 Revision
 #####################
 
 rcont:numericValue a owl:DatatypeProperty ;
@@ -384,7 +398,7 @@ rcont:description a owl:AnnotationProperty ;
     rdfs:comment "Human-readable explanatory note." .
 
 #####################
-### Alignment / Interoperability Hints
+### Alignment / Interoperability Hints — v2.0 Addition
 #####################
 
 # These are not strict equivalences (owl:equivalentClass) because different ontologies slice reality differently.
@@ -397,7 +411,7 @@ rcont:SimulationRun rdfs:seeAlso prov:Activity .
 rcont:ModelVersion rdfs:seeAlso prov:Entity .
 
 #####################
-### Logical Constraints / Restrictions (OWL axioms)
+### Logical Constraints / Restrictions (OWL axioms) — v2.0 Addition
 #####################
 
 # Each RValue must connect exactly two Nodes via connectsFrom / connectsTo.
@@ -497,7 +511,7 @@ rcont:ValidityInterval
         ] .
 
 #####################
-### Convenience Datatype Properties
+### Convenience Datatype Properties — v2.0 Addition
 #####################
 
 rcont:label a owl:DatatypeProperty ;
