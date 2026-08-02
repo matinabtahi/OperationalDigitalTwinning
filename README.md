@@ -1,14 +1,12 @@
 ## Author
 
-**Dr. Seyed Matin Abtahi**  
+Matin Abtahi  
 Postdoctoral Fellow  
 Centre for Zero Energy Building Studies (CZEBS)  
 Department of Building, Civil and Environmental Engineering  
 Concordia University, Montréal, Canada
-
-📧 Email: matinabtahi@gmail.com
-
 Research interests include operational digital twins, building energy systems, semantic interoperability, demand flexibility and B2G services.
+📧 Email: matinabtahi@gmail.com
 
 
 ## Version
