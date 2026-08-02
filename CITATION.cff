@@ -7,3 +7,18 @@ authors:
     orcid: https://orcid.org/0000-0003-3941-9485
 license: MIT
 repository-code: https://github.com/matinabtahi/operational_digital_twinning
+
+
+
+cff-version: 2.0.0
+message: "If you use RCOnt in your research, software, or publications, please cite it using the metadata below."
+title: "RCOnt: An Ontology for Reduced-Order Thermal Models in Operational Building Digital Twins"
+version: "2.0"
+type: software
+
+authors:
+  - family-names: Abtahi
+    given-names: Matin
+    orcid: "https://orcid.org/0000-0003-3941-9485"
+license: MIT
+repository-code: "https://github.com/matinabtahi/OperationalDigitalTwinning"
