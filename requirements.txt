@@ -1,2 +1,2 @@
-rdflib>=7.0,<8
-pyvis>=0.3,<0.4
+rdflib>=7.6,<8
+pyvis==0.3.2

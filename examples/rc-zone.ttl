@@ -1,0 +1,20 @@
+@prefix brick: <https://brickschema.org/schema/Brick#> .
+@prefix qudt: <http://qudt.org/schema/qudt/> .
+@prefix unit: <http://qudt.org/vocab/unit/> .
+@prefix rcont: <https://matinabtahi.github.io/OperationalDigitalTwinning/RCOnt#> .
+@prefix zoneont: <https://matinabtahi.github.io/OperationalDigitalTwinning/ZoneOnt#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix ex: <https://example.org/rcont-demo#> .
+
+ex:Zone1 a brick:HVAC_Zone, zoneont:ThermalZone ; rdfs:label "Example residential zone"@en ; zoneont:hasThermalInteraction zoneont:MixedModeZone ; zoneont:hasOccupancyType zoneont:ResidentialZone ; zoneont:floorArea "105.0"^^xsd:decimal ; zoneont:ceilingHeight "2.5"^^xsd:decimal .
+ex:OutdoorTemp a brick:Outdoor_Air_Temperature_Sensor ; qudt:unit unit:DEG_C .
+ex:SolarIrradiance a brick:Solar_Irradiance_Sensor ; qudt:unit unit:W-PER-M2 .
+ex:IndoorTemp a brick:Zone_Air_Temperature_Sensor ; brick:isPointOf ex:Zone1 ; qudt:unit unit:DEG_C .
+ex:HeatInput a brick:Heating_Command ; brick:isPointOf ex:Zone1 ; qudt:unit unit:W .
+ex:Zone1_RCModel a rcont:RCModel ; rdfs:label "1R1C1α model for Zone1"@en ; rcont:modelsZone ex:Zone1 ; rcont:hasInput ex:OutdoorTemp, ex:HeatInput, ex:SolarIrradiance ; rcont:hasState ex:IndoorTemp ; rcont:hasNode ex:IndoorNode, ex:OutdoorNode ; rcont:hasResistance ex:R_Zone1 ; rcont:hasCapacitance ex:C_Zone1 ; rcont:hasSolarAperture ex:Alpha_Zone1 ; rcont:governingEquation "C*dTi/dt = (To-Ti)/R + alpha*G + Q" .
+ex:IndoorNode a rcont:AirNode ; rdfs:label "indoor lumped thermal node"@en .
+ex:OutdoorNode a rcont:BoundaryNode ; rdfs:label "outdoor boundary node"@en .
+ex:R_Zone1 a rcont:ThermalResistance ; rcont:numericValue "0.0075"^^xsd:decimal ; rcont:unit unit:K-PER-W ; rcont:connectsFrom ex:IndoorNode ; rcont:connectsTo ex:OutdoorNode ; rcont:connectsNode ex:IndoorNode, ex:OutdoorNode .
+ex:C_Zone1 a rcont:ThermalCapacitance ; rcont:numericValue "15000000"^^xsd:decimal ; rcont:unit unit:J-PER-K ; rcont:belongsToNode ex:IndoorNode .
+ex:Alpha_Zone1 a rcont:SolarAperture ; rcont:numericValue "3.5"^^xsd:decimal ; rcont:unit unit:M2 ; rcont:belongsToNode ex:IndoorNode .

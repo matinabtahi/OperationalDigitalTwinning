@@ -3,18 +3,19 @@ message: "If you use RCOnt in research, software, or publications, please cite t
 title: "Resistance–Capacitance Ontology (RCOnt)"
 type: software
 version: "2.0.0"
+abstract: "A lightweight OWL ontology for representing reduced-order resistance–capacitance thermal models, including model structure, parameters, states, inputs, provenance, validity and performance metadata."
 authors:
   - family-names: Abtahi
     given-names: Matin
     orcid: "https://orcid.org/0000-0003-3941-9485"
     affiliation: "Concordia University"
-repository-code: "https://github.com/matinabtahi/Resistance-Capacitance-Ontology-RCOnt"
-url: "https://github.com/matinabtahi/Resistance-Capacitance-Ontology-RCOnt"
+repository-code: "https://github.com/matinabtahi/Resistance-CapacitanceOntology"
+url: "https://github.com/matinabtahi/Resistance-CapacitanceOntology"
 license: MIT
 keywords:
+  - ontology
   - resistance-capacitance model
+  - building energy modelling
   - building digital twin
   - semantic web
-  - building energy modelling
   - model predictive control
-  - ontology

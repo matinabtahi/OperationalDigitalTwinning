@@ -1,0 +1,14 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Generated visualization
+examples/rcont-graph.html
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
