@@ -1,24 +1,20 @@
-cff-version: 1.0.0
-message: "If you use this repo, please cite it as below."
-title: "Operational Digital Twinning with Semantic Ontologies"
-authors:
-  - family-names: Abtahi
-    given-names: Matin
-    orcid: https://orcid.org/0000-0003-3941-9485
-license: MIT
-repository-code: https://github.com/matinabtahi/operational_digital_twinning
-
-
-
-cff-version: 2.0.0
-message: "If you use RCOnt in your research, software, or publications, please cite it using the metadata below."
-title: "RCOnt: An Ontology for Reduced-Order Thermal Models in Operational Building Digital Twins"
-version: "2.0"
+cff-version: 1.2.0
+message: "If you use RCOnt in research, software, or publications, please cite the archived release."
+title: "Resistance–Capacitance Ontology (RCOnt)"
 type: software
-
+version: "2.0.0"
 authors:
   - family-names: Abtahi
     given-names: Matin
     orcid: "https://orcid.org/0000-0003-3941-9485"
+    affiliation: "Concordia University"
+repository-code: "https://github.com/matinabtahi/Resistance-Capacitance-Ontology-RCOnt"
+url: "https://github.com/matinabtahi/Resistance-Capacitance-Ontology-RCOnt"
 license: MIT
-repository-code: "https://github.com/matinabtahi/OperationalDigitalTwinning"
+keywords:
+  - resistance-capacitance model
+  - building digital twin
+  - semantic web
+  - building energy modelling
+  - model predictive control
+  - ontology
